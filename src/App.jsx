@@ -15,6 +15,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
+import AdminLogin from './pages/AdminLogin';
+import EmailVerification from './pages/EmailVerification';
 import './App.css';
 
 function App() {
@@ -98,9 +100,17 @@ function App() {
               path="/dashboard" 
               element={user ? <Dashboard user={user} siteSettings={siteSettings} /> : <Navigate to="/login" />} 
             />
-            <Route 
-              path="/admin" 
-              element={isAdmin ? <AdminPanel siteSettings={siteSettings} updateSiteSettings={updateSiteSettings} /> : <Navigate to="/login" />} 
+            <Route
+              path="/admin-login"
+              element={!isAdmin ? <AdminLogin onAdminLogin={login} /> : <Navigate to="/admin" />}
+            />
+            <Route
+              path="/admin"
+              element={isAdmin ? <AdminPanel siteSettings={siteSettings} updateSiteSettings={updateSiteSettings} /> : <Navigate to="/admin-login" />}
+            />
+            <Route
+              path="/verify-email"
+              element={<EmailVerification />}
             />
           </Routes>
         </main>
