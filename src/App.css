@@ -917,6 +917,49 @@ body {
   }
 }
 
+/* Loading Spinner Styles */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.spinner-small {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #f3f3f3;
+  border-left-color: var(--primary-color);
+}
+
+.spinner-medium {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-left-color: var(--primary-color);
+}
+
+.spinner-large {
+  width: 60px;
+  height: 60px;
+  border: 6px solid #f3f3f3;
+  border-left-color: var(--primary-color);
+}
+
+.loading-message {
+  color: var(--dark-color);
+  font-weight: 500;
+  margin: 0;
+  text-align: center;
+}
+
 /* Responsive Design for Modals */
 @media (max-width: 768px) {
   .modal-overlay {
