@@ -1069,115 +1069,432 @@ ${kyc.reviewNotes ? 'Review Notes: ' + kyc.reviewNotes : 'No review notes yet'}`
     );
   };
 
+  const [settingsSaved, setSettingsSaved] = useState(false);
+  const [settingsErrors, setSettingsErrors] = useState({});
+
+  // Advanced crypto coins list with full names
+  const cryptoCoins = {
+    btc: { name: 'Bitcoin (BTC)', symbol: 'BTC', placeholder: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa' },
+    usdt: { name: 'Tether (USDT)', symbol: 'USDT', placeholder: '0x742d35Cc6634C0532925a3b8D0F8C9' },
+    eth: { name: 'Ethereum (ETH)', symbol: 'ETH', placeholder: '0x742d35Cc6634C0532925a3b8D0F8C9' },
+    bnb: { name: 'Binance Coin (BNB)', symbol: 'BNB', placeholder: '0x742d35Cc6634C0532925a3b8D0F8C9' },
+    doge: { name: 'Dogecoin (DOGE)', symbol: 'DOGE', placeholder: 'DHy4cNbJr3QQsUJ8uMdBWjTaRsrYBJZHJ2' },
+    trx: { name: 'TRON (TRX)', symbol: 'TRX', placeholder: 'TLPpNHsVgR3BkW3f7ggYndhXRnwfRDvf3X' },
+    ltc: { name: 'Litecoin (LTC)', symbol: 'LTC', placeholder: 'LTC1234567890ABCDEFGHIJK' },
+    xrp: { name: 'Ripple (XRP)', symbol: 'XRP', placeholder: 'rN7n7otQDd6FczFgLdSqtcsAUxDkw6fzRH' },
+    ada: { name: 'Cardano (ADA)', symbol: 'ADA', placeholder: 'addr1qy2jt0qpqz2z2z2z2z2z2z2z2z2z2' },
+    shib: { name: 'Shiba Inu (SHIB)', symbol: 'SHIB', placeholder: '0x742d35Cc6634C0532925a3b8D0F8C9' }
+  };
+
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validateSettings = () => {
+    const errors = {};
+
+    if (!localSettings.contactEmail || !validateEmail(localSettings.contactEmail)) {
+      errors.contactEmail = 'Please enter a valid email address';
+    }
+
+    if (!localSettings.supportPhone || localSettings.supportPhone.length < 10) {
+      errors.supportPhone = 'Please enter a valid phone number (minimum 10 digits)';
+    }
+
+    Object.entries(localSettings.coins || {}).forEach(([coinCode, coinData]) => {
+      if (coinData.enabled && (!coinData.address || coinData.address.length < 20)) {
+        errors[`${coinCode}_address`] = `Please enter a valid ${coinCode.toUpperCase()} address`;
+      }
+    });
+
+    setSettingsErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const handleQRUpload = (coinCode, file) => {
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        handleCoinSettingChange(coinCode, 'qrCode', e.target.result);
+        showNotification('success', `QR code uploaded for ${coinCode.toUpperCase()}`);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const saveSettingsAdvanced = async () => {
+    if (!validateSettings()) {
+      showNotification('error', 'Please fix the validation errors before saving');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await apiService.updateSiteSettings(localSettings);
+      updateSiteSettings(localSettings);
+      setSettingsSaved(true);
+      showNotification('success', 'Settings saved successfully!');
+
+      // Hide success message after 5 seconds
+      setTimeout(() => setSettingsSaved(false), 5000);
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      showNotification('error', 'Failed to save settings. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const renderSettings = () => (
     <div>
-      <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>⚙️ Site Settings</h2>
-      
+      <h2 style={{ marginBottom: '2rem', color: '#667eea', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+        ⚙️ Advanced Site Settings
+        {settingsSaved && (
+          <span style={{
+            background: 'linear-gradient(135deg, #28a745, #66bb6a)',
+            color: 'white',
+            padding: '0.5rem 1rem',
+            borderRadius: '20px',
+            fontSize: '0.8rem',
+            fontWeight: 'normal'
+          }}>
+            ✅ Settings Saved Successfully
+          </span>
+        )}
+      </h2>
+
+      {/* General Settings */}
       <div className="card" style={{ marginBottom: '2rem' }}>
-        <h3 style={{ marginBottom: '1.5rem' }}>General Settings</h3>
-        
-        <div style={{ display: 'grid', gap: '1.5rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div style={{ fontSize: '2rem' }}>🏢</div>
+          <h3 style={{ margin: 0 }}>General Settings</h3>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
           <div className="form-group">
-            <label>Site Name</label>
+            <label style={{ fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+              📝 Site Name
+            </label>
             <input
               type="text"
               className="form-control"
               value={localSettings.siteName}
               onChange={(e) => handleSettingsChange('siteName', e.target.value)}
+              placeholder="Enter your site name"
+              style={{ fontSize: '1rem' }}
             />
           </div>
-          
+
           <div className="form-group">
-            <label>Primary Color</label>
-            <input
-              type="color"
-              className="form-control"
-              value={localSettings.primaryColor}
-              onChange={(e) => handleSettingsChange('primaryColor', e.target.value)}
-              style={{ height: '50px' }}
-            />
+            <label style={{ fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+              🎨 Primary Brand Color
+            </label>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+              <input
+                type="color"
+                className="form-control"
+                value={localSettings.primaryColor}
+                onChange={(e) => handleSettingsChange('primaryColor', e.target.value)}
+                style={{ height: '50px', width: '100px', padding: '0.25rem' }}
+              />
+              <div style={{
+                background: localSettings.primaryColor,
+                padding: '0.5rem 1rem',
+                borderRadius: '10px',
+                color: 'white',
+                fontSize: '0.9rem',
+                fontWeight: '600'
+              }}>
+                Preview Color
+              </div>
+            </div>
           </div>
-          
+
           <div className="form-group">
-            <label>Contact Email</label>
+            <label style={{ fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+              📧 Contact Email *
+            </label>
             <input
               type="email"
-              className="form-control"
+              className={`form-control ${settingsErrors.contactEmail ? 'error' : ''}`}
               value={localSettings.contactEmail}
               onChange={(e) => handleSettingsChange('contactEmail', e.target.value)}
+              placeholder="contact@yoursite.com"
+              style={{ fontSize: '1rem' }}
             />
+            {settingsErrors.contactEmail && (
+              <div style={{ color: '#dc3545', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                {settingsErrors.contactEmail}
+              </div>
+            )}
           </div>
-          
+
           <div className="form-group">
-            <label>Support Phone</label>
+            <label style={{ fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+              📱 Support Phone *
+            </label>
             <input
               type="text"
-              className="form-control"
+              className={`form-control ${settingsErrors.supportPhone ? 'error' : ''}`}
               value={localSettings.supportPhone}
               onChange={(e) => handleSettingsChange('supportPhone', e.target.value)}
+              placeholder="+1-800-CRYPTO"
+              style={{ fontSize: '1rem' }}
             />
+            {settingsErrors.supportPhone && (
+              <div style={{ color: '#dc3545', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                {settingsErrors.supportPhone}
+              </div>
+            )}
           </div>
         </div>
       </div>
 
+      {/* Cryptocurrency Settings */}
       <div className="card" style={{ marginBottom: '2rem' }}>
-        <h3 style={{ marginBottom: '1.5rem' }}>Cryptocurrency Settings</h3>
-        
-        {Object.entries(localSettings.coins).map(([coinCode, coinData]) => (
-          <div key={coinCode} style={{ 
-            border: '1px solid #e0e0e0', 
-            borderRadius: '15px', 
-            padding: '1.5rem', 
-            marginBottom: '1rem' 
-          }}>
-            <h4 style={{ marginBottom: '1rem', textTransform: 'uppercase', color: '#667eea' }}>
-              {coinCode} Settings
-            </h4>
-            
-            <div style={{ display: 'grid', gap: '1rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                <input
-                  type="checkbox"
-                  id={`${coinCode}-enabled`}
-                  checked={coinData.enabled}
-                  onChange={(e) => handleCoinSettingChange(coinCode, 'enabled', e.target.checked)}
-                />
-                <label htmlFor={`${coinCode}-enabled`}>Enable {coinCode.toUpperCase()}</label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div style={{ fontSize: '2rem' }}>💰</div>
+          <h3 style={{ margin: 0 }}>Cryptocurrency Wallet Settings</h3>
+        </div>
+        <p style={{ color: '#666', marginBottom: '2rem', fontSize: '0.95rem' }}>
+          Configure wallet addresses and networks for each supported cryptocurrency. Enable/disable coins as needed.
+        </p>
+
+        <div style={{ display: 'grid', gap: '2rem' }}>
+          {Object.entries(cryptoCoins).map(([coinCode, coinInfo]) => {
+            const coinData = localSettings.coins?.[coinCode] || { enabled: false, address: '', network: '' };
+
+            return (
+              <div key={coinCode} style={{
+                border: `2px solid ${coinData.enabled ? '#28a745' : '#e0e0e0'}`,
+                borderRadius: '15px',
+                padding: '1.5rem',
+                background: coinData.enabled ? 'rgba(40, 167, 69, 0.05)' : 'rgba(255, 255, 255, 0.5)',
+                transition: 'all 0.3s ease'
+              }}>
+                {/* Coin Header */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <div style={{
+                      fontSize: '2rem',
+                      width: '60px',
+                      height: '60px',
+                      background: coinData.enabled ? 'linear-gradient(135deg, #28a745, #66bb6a)' : '#f8f9fa',
+                      borderRadius: '50%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      border: '2px solid #e0e0e0'
+                    }}>
+                      {coinInfo.symbol === 'BTC' ? '₿' :
+                       coinInfo.symbol === 'ETH' ? 'Ξ' :
+                       coinInfo.symbol === 'USDT' ? '₮' :
+                       coinInfo.symbol === 'BNB' ? '💛' :
+                       coinInfo.symbol === 'DOGE' ? '🐕' :
+                       coinInfo.symbol === 'TRX' ? '🔷' :
+                       coinInfo.symbol === 'LTC' ? 'Ł' :
+                       coinInfo.symbol === 'XRP' ? '💧' :
+                       coinInfo.symbol === 'ADA' ? '🔺' :
+                       coinInfo.symbol === 'SHIB' ? '🐕' : '💰'}
+                    </div>
+                    <div>
+                      <h4 style={{ margin: 0, color: '#333', fontSize: '1.3rem' }}>
+                        {coinInfo.name}
+                      </h4>
+                      <p style={{ margin: 0, color: '#666', fontSize: '0.9rem' }}>
+                        Network: {coinData.network || 'Not configured'}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Enable/Disable Toggle */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                    <label style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      cursor: 'pointer',
+                      fontSize: '1rem',
+                      fontWeight: '600'
+                    }}>
+                      <input
+                        type="checkbox"
+                        checked={coinData.enabled}
+                        onChange={(e) => handleCoinSettingChange(coinCode, 'enabled', e.target.checked)}
+                        style={{
+                          width: '20px',
+                          height: '20px',
+                          accentColor: '#28a745'
+                        }}
+                      />
+                      {coinData.enabled ? (
+                        <span style={{ color: '#28a745' }}>✅ Enabled</span>
+                      ) : (
+                        <span style={{ color: '#666' }}>⭕ Disabled</span>
+                      )}
+                    </label>
+                  </div>
+                </div>
+
+                {/* Coin Configuration */}
+                {coinData.enabled && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1rem' }}>
+                    <div className="form-group">
+                      <label style={{ fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+                        🏦 Wallet Address *
+                      </label>
+                      <input
+                        type="text"
+                        className={`form-control ${settingsErrors[`${coinCode}_address`] ? 'error' : ''}`}
+                        value={coinData.address}
+                        onChange={(e) => handleCoinSettingChange(coinCode, 'address', e.target.value)}
+                        placeholder={coinInfo.placeholder}
+                        style={{ fontSize: '0.9rem', fontFamily: 'monospace' }}
+                      />
+                      {settingsErrors[`${coinCode}_address`] && (
+                        <div style={{ color: '#dc3545', fontSize: '0.8rem', marginTop: '0.25rem' }}>
+                          {settingsErrors[`${coinCode}_address`]}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="form-group">
+                      <label style={{ fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+                        🌐 Network Type
+                      </label>
+                      <select
+                        className="form-control"
+                        value={coinData.network}
+                        onChange={(e) => handleCoinSettingChange(coinCode, 'network', e.target.value)}
+                        style={{ fontSize: '0.9rem' }}
+                      >
+                        <option value="">Select Network</option>
+                        {coinCode === 'btc' && <option value="Bitcoin">Bitcoin</option>}
+                        {coinCode === 'btc' && <option value="BEP20">BEP20 (Binance Smart Chain)</option>}
+                        {(coinCode === 'usdt' || coinCode === 'eth' || coinCode === 'shib') && <option value="ERC20">ERC20 (Ethereum)</option>}
+                        {(coinCode === 'usdt' || coinCode === 'eth' || coinCode === 'bnb' || coinCode === 'shib') && <option value="BEP20">BEP20 (Binance Smart Chain)</option>}
+                        {coinCode === 'usdt' && <option value="TRC20">TRC20 (TRON)</option>}
+                        {coinCode === 'trx' && <option value="TRC20">TRC20 (TRON)</option>}
+                        {coinCode === 'doge' && <option value="Dogecoin">Dogecoin</option>}
+                        {coinCode === 'ltc' && <option value="Litecoin">Litecoin</option>}
+                        {coinCode === 'xrp' && <option value="XRP Ledger">XRP Ledger</option>}
+                        {coinCode === 'ada' && <option value="Cardano">Cardano</option>}
+                      </select>
+                    </div>
+
+                    <div className="form-group">
+                      <label style={{ fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+                        📱 QR Code (Optional)
+                      </label>
+                      <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={(e) => handleQRUpload(coinCode, e.target.files[0])}
+                          style={{
+                            padding: '0.5rem',
+                            border: '2px dashed #ccc',
+                            borderRadius: '10px',
+                            background: '#f8f9fa',
+                            cursor: 'pointer',
+                            fontSize: '0.9rem'
+                          }}
+                        />
+                        {coinData.qrCode && (
+                          <img
+                            src={coinData.qrCode}
+                            alt="QR Code"
+                            style={{
+                              width: '60px',
+                              height: '60px',
+                              borderRadius: '10px',
+                              border: '2px solid #28a745'
+                            }}
+                          />
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              
-              <div className="form-group">
-                <label>Wallet Address</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={coinData.address}
-                  onChange={(e) => handleCoinSettingChange(coinCode, 'address', e.target.value)}
-                  placeholder={`Enter ${coinCode.toUpperCase()} wallet address`}
-                />
-              </div>
-              
-              <div className="form-group">
-                <label>Network</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  value={coinData.network}
-                  onChange={(e) => handleCoinSettingChange(coinCode, 'network', e.target.value)}
-                  placeholder="e.g., ERC20, BEP20, TRC20"
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
 
-      <div style={{ display: 'flex', gap: '1rem' }}>
-        <button className="btn btn-success" onClick={saveSettings}>
-          💾 Save All Settings
-        </button>
-        <button className="btn btn-secondary" onClick={() => setLocalSettings(siteSettings)}>
-          🔄 Reset Changes
-        </button>
+      {/* Payment API Settings */}
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+          <div style={{ fontSize: '2rem' }}>🔌</div>
+          <h3 style={{ margin: 0 }}>Payment API Integration</h3>
+        </div>
+
+        <div style={{ display: 'grid', gap: '1rem' }}>
+          <div className="form-group">
+            <label style={{ fontWeight: '600', marginBottom: '0.5rem', display: 'block' }}>
+              🔑 Payment Gateway API Key
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              value={localSettings.paymentApiKey || ''}
+              onChange={(e) => handleSettingsChange('paymentApiKey', e.target.value)}
+              placeholder="Enter your payment gateway API key"
+              style={{ fontSize: '1rem' }}
+            />
+            <small style={{ color: '#666', fontSize: '0.8rem' }}>
+              Used for processing cryptocurrency payments and withdrawals
+            </small>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div style={{
+        display: 'flex',
+        gap: '1rem',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        background: 'rgba(255, 255, 255, 0.9)',
+        padding: '1.5rem',
+        borderRadius: '15px',
+        border: '1px solid #e0e0e0'
+      }}>
+        <div style={{ display: 'flex', gap: '1rem' }}>
+          <button
+            className="btn btn-success"
+            onClick={saveSettingsAdvanced}
+            disabled={loading}
+            style={{
+              fontSize: '1rem',
+              padding: '1rem 2rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem'
+            }}
+          >
+            {loading ? '⏳' : '💾'} Save All Settings
+          </button>
+          <button
+            className="btn btn-secondary"
+            onClick={() => {
+              setLocalSettings(siteSettings);
+              setSettingsErrors({});
+              setSettingsSaved(false);
+            }}
+            style={{
+              fontSize: '1rem',
+              padding: '1rem 2rem'
+            }}
+          >
+            🔄 Reset Changes
+          </button>
+        </div>
+
+        <div style={{ fontSize: '0.9rem', color: '#666' }}>
+          Last saved: {new Date().toLocaleString()}
+        </div>
       </div>
     </div>
   );
