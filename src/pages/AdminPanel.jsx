@@ -9,6 +9,13 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
   const [userFormOpen, setUserFormOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
   const [userFormMode, setUserFormMode] = useState('add');
+  const [loading, setLoading] = useState(false);
+  const [recentActivity, setRecentActivity] = useState([
+    { type: 'New user registration', description: 'john_doe joined 2 hours ago', time: '2 hours ago' },
+    { type: 'Investment created', description: '$2,500 Pro Plan investment by jane_smith', time: '4 hours ago' },
+    { type: 'Withdrawal request', description: '$500 BTC withdrawal pending approval', time: '6 hours ago' },
+    { type: 'User status updated', description: 'crypto_trader account activated', time: '8 hours ago' }
+  ]);
 
 
   const [withdrawals, setWithdrawals] = useState([
@@ -28,6 +35,37 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
     { id: 2, userId: 2, plan: 'Pro Plan', amount: 2500, profit: 875.25, status: 'active', startDate: '2024-01-10' },
     { id: 3, userId: 3, plan: 'Elite Plan', amount: 5000, profit: 1250.00, status: 'completed', startDate: '2024-01-05' }
   ]);
+
+  // Load data on component mount
+  useEffect(() => {
+    loadAdminData();
+  }, []);
+
+  const loadAdminData = async () => {
+    setLoading(true);
+    try {
+      // Load users, withdrawals, and other data from API
+      const [usersResponse, withdrawalsResponse] = await Promise.all([
+        apiService.getUsers(),
+        apiService.getWithdrawals()
+      ]);
+
+      if (usersResponse.users) {
+        setUsers(usersResponse.users);
+      }
+
+      if (withdrawalsResponse.withdrawals) {
+        setWithdrawals(withdrawalsResponse.withdrawals);
+      }
+
+      showNotification('success', 'Admin data loaded successfully!');
+    } catch (error) {
+      console.error('Error loading admin data:', error);
+      showNotification('warning', 'Using local data - API connection failed');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const [investmentPlans, setInvestmentPlans] = useState([
     { id: 1, name: 'Starter Plan', minAmount: 100, maxAmount: 999, dailyReturn: 2.5, duration: 30, status: 'active' },
@@ -332,7 +370,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
                         onClick={() => handleSuspendUser(user.id)}
                         title={`${user.status === 'active' ? 'Suspend' : 'Activate'} ${user.username}`}
                       >
-                        {user.status === 'active' ? '🚫 Suspend' : '�� Activate'}
+                        {user.status === 'active' ? '🚫 Suspend' : '✅ Activate'}
                       </button>
                     </div>
                   </td>
