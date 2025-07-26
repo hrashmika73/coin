@@ -83,22 +83,24 @@ function Footer({ siteSettings }) {
         </div>
         
         <div className="footer-section">
-          <h3>💼 Services</h3>
+          <h3 style={{ color: 'var(--accent-color)', marginBottom: 'var(--spacing-sm)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)' }}>
+            💼 Services
+          </h3>
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>₿ Bitcoin Trading</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>₿ Bitcoin Trading</span>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>💎 Cryptocurrency Investment</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>💎 Cryptocurrency Investment</span>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>📈 Portfolio Management</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>📈 Portfolio Management</span>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>💰 Profit Maximization</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>💰 Profit Maximization</span>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>🔒 Secure Transactions</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>🔒 Secure Transactions</span>
             </li>
           </ul>
         </div>
