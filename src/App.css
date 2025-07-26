@@ -786,7 +786,7 @@ body {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 0.9rem;
+  font-size: clamp(0.8rem, 2vw, 1rem);
 }
 
 /* Trading View Chart */
