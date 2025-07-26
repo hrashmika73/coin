@@ -17,6 +17,8 @@ import Dashboard from './pages/Dashboard';
 import AdminPanel from './pages/AdminPanel';
 import AdminLogin from './pages/AdminLogin';
 import EmailVerification from './pages/EmailVerification';
+import Deposit from './pages/Deposit';
+import Withdraw from './pages/Withdraw';
 import './App.css';
 
 function App() {
@@ -111,6 +113,14 @@ function App() {
             <Route
               path="/verify-email"
               element={<EmailVerification />}
+            />
+            <Route
+              path="/deposit"
+              element={user ? <Deposit /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/withdraw"
+              element={user ? <Withdraw /> : <Navigate to="/login" />}
             />
           </Routes>
         </main>
