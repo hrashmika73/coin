@@ -1,45 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Project</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f5f5f5;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .title {
-            color: #333;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .status {
-            background: #d4edda;
-            color: #155724;
-            padding: 10px;
-            border-radius: 4px;
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1 class="title">Welcome to Your Project</h1>
-        <div class="status">
-            ✅ Application is now running successfully!
-        </div>
-        <p>This is a basic HTML page. You can now start building your application.</p>
-    </div>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/bitcoin.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kleverscape - Bitcoin Investment Platform</title>
+    <meta name="description" content="Join 100,000+ investors earning daily profits with Kleverscape - the world's most trusted Bitcoin investment platform. Start with just $100 and earn up to 7.5% daily returns." />
+    <meta name="keywords" content="bitcoin investment, cryptocurrency, daily profits, trading platform, crypto investment" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://kleverscape.com/" />
+    <meta property="og:title" content="Kleverscape - Bitcoin Investment Platform" />
+    <meta property="og:description" content="Join 100,000+ investors earning daily profits with the world's most trusted Bitcoin investment platform." />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://kleverscape.com/" />
+    <meta property="twitter:title" content="Kleverscape - Bitcoin Investment Platform" />
+    <meta property="twitter:description" content="Join 100,000+ investors earning daily profits with the world's most trusted Bitcoin investment platform." />
+    <meta property="twitter:image" content="/og-image.png" />
+
+    <!-- Preconnect to external resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
