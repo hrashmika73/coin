@@ -3,22 +3,24 @@ import { useState } from 'react';
 function AdminPanel({ siteSettings, updateSiteSettings }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [localSettings, setLocalSettings] = useState(siteSettings);
-  const [users] = useState([
+
+
+  const [withdrawals, setWithdrawals] = useState([
+    { id: 1, userId: 1, amount: 500, coin: 'BTC', status: 'pending', requestDate: '2024-01-22', wallet: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa' },
+    { id: 2, userId: 2, amount: 1000, coin: 'USDT', status: 'approved', requestDate: '2024-01-20', wallet: '0x742d35Cc6634C0532925a3b8D0F8C9' },
+    { id: 3, userId: 3, amount: 2500, coin: 'ETH', status: 'rejected', requestDate: '2024-01-18', wallet: '0x742d35Cc6634C0532925a3b8D0F8C9' }
+  ]);
+
+  const [users, setUsers] = useState([
     { id: 1, username: 'john_doe', email: 'john@example.com', balance: 2500.50, status: 'active', joinDate: '2024-01-15' },
     { id: 2, username: 'jane_smith', email: 'jane@example.com', balance: 5000.00, status: 'active', joinDate: '2024-01-10' },
     { id: 3, username: 'crypto_trader', email: 'trader@example.com', balance: 15000.75, status: 'active', joinDate: '2024-01-05' }
   ]);
 
-  const [investments] = useState([
+  const [investments, setInvestments] = useState([
     { id: 1, userId: 1, plan: 'Starter Plan', amount: 1000, profit: 125.50, status: 'active', startDate: '2024-01-15' },
     { id: 2, userId: 2, plan: 'Pro Plan', amount: 2500, profit: 875.25, status: 'active', startDate: '2024-01-10' },
     { id: 3, userId: 3, plan: 'Elite Plan', amount: 5000, profit: 1250.00, status: 'completed', startDate: '2024-01-05' }
-  ]);
-
-  const [withdrawals] = useState([
-    { id: 1, userId: 1, amount: 500, coin: 'BTC', status: 'pending', requestDate: '2024-01-22', wallet: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa' },
-    { id: 2, userId: 2, amount: 1000, coin: 'USDT', status: 'approved', requestDate: '2024-01-20', wallet: '0x742d35Cc6634C0532925a3b8D0F8C9' },
-    { id: 3, userId: 3, amount: 2500, coin: 'ETH', status: 'rejected', requestDate: '2024-01-18', wallet: '0x742d35Cc6634C0532925a3b8D0F8C9' }
   ]);
 
   const [investmentPlans, setInvestmentPlans] = useState([
@@ -50,6 +52,101 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
   const saveSettings = () => {
     updateSiteSettings(localSettings);
     alert('Settings saved successfully!');
+  };
+
+  // Button handler functions
+  const handleApproveWithdrawal = (withdrawalId) => {
+    setWithdrawals(prev => prev.map(w =>
+      w.id === withdrawalId ? { ...w, status: 'approved' } : w
+    ));
+    alert('Withdrawal approved successfully!');
+  };
+
+  const handleRejectWithdrawal = (withdrawalId) => {
+    setWithdrawals(prev => prev.map(w =>
+      w.id === withdrawalId ? { ...w, status: 'rejected' } : w
+    ));
+    alert('Withdrawal rejected!');
+  };
+
+  const handleSuspendUser = (userId) => {
+    setUsers(prev => prev.map(u =>
+      u.id === userId ? { ...u, status: u.status === 'active' ? 'suspended' : 'active' } : u
+    ));
+    alert('User status updated!');
+  };
+
+  const handleEditUser = (userId) => {
+    const user = users.find(u => u.id === userId);
+    const newEmail = prompt('Enter new email:', user.email);
+    if (newEmail && newEmail !== user.email) {
+      setUsers(prev => prev.map(u =>
+        u.id === userId ? { ...u, email: newEmail } : u
+      ));
+      alert('User updated successfully!');
+    }
+  };
+
+  const handleAddNewUser = () => {
+    const username = prompt('Enter username:');
+    const email = prompt('Enter email:');
+    if (username && email) {
+      const newUser = {
+        id: users.length + 1,
+        username,
+        email,
+        balance: 0,
+        status: 'active',
+        joinDate: new Date().toISOString().split('T')[0]
+      };
+      setUsers(prev => [...prev, newUser]);
+      alert('User added successfully!');
+    }
+  };
+
+  const handleViewInvestmentDetails = (investmentId) => {
+    const investment = investments.find(i => i.id === investmentId);
+    alert(`Investment Details:\nID: ${investment.id}\nPlan: ${investment.plan}\nAmount: ${formatCurrency(investment.amount)}\nProfit: ${formatCurrency(investment.profit)}\nStatus: ${investment.status}`);
+  };
+
+  const handleEditPlan = (planId) => {
+    const plan = investmentPlans.find(p => p.id === planId);
+    const newReturn = prompt('Enter new daily return %:', plan.dailyReturn);
+    if (newReturn && !isNaN(newReturn)) {
+      setInvestmentPlans(prev => prev.map(p =>
+        p.id === planId ? { ...p, dailyReturn: parseFloat(newReturn) } : p
+      ));
+      alert('Plan updated successfully!');
+    }
+  };
+
+  const handleTogglePlan = (planId) => {
+    setInvestmentPlans(prev => prev.map(p =>
+      p.id === planId ? { ...p, status: p.status === 'active' ? 'disabled' : 'active' } : p
+    ));
+    alert('Plan status updated!');
+  };
+
+  const handleAddNewPlan = () => {
+    const name = prompt('Enter plan name:');
+    const minAmount = prompt('Enter minimum amount:');
+    const maxAmount = prompt('Enter maximum amount:');
+    const dailyReturn = prompt('Enter daily return %:');
+    const duration = prompt('Enter duration in days:');
+
+    if (name && minAmount && maxAmount && dailyReturn && duration) {
+      const newPlan = {
+        id: investmentPlans.length + 1,
+        name,
+        minAmount: parseFloat(minAmount),
+        maxAmount: parseFloat(maxAmount),
+        dailyReturn: parseFloat(dailyReturn),
+        duration: parseInt(duration),
+        status: 'active'
+      };
+      setInvestmentPlans(prev => [...prev, newPlan]);
+      alert('New plan added successfully!');
+    }
   };
 
   const formatCurrency = (amount) => {
@@ -149,7 +246,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
       <div className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <h3>All Users</h3>
-          <button className="btn btn-primary">Add New User</button>
+          <button className="btn btn-primary" onClick={handleAddNewUser}>Add New User</button>
         </div>
         
         <div className="table-container">
@@ -176,11 +273,19 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
                   <td>{user.joinDate}</td>
                   <td>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button className="btn btn-primary" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                      <button
+                        className="btn btn-primary"
+                        style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
+                        onClick={() => handleEditUser(user.id)}
+                      >
                         Edit
                       </button>
-                      <button className="btn btn-warning" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
-                        Suspend
+                      <button
+                        className="btn btn-warning"
+                        style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
+                        onClick={() => handleSuspendUser(user.id)}
+                      >
+                        {user.status === 'active' ? 'Suspend' : 'Activate'}
                       </button>
                     </div>
                   </td>
@@ -229,10 +334,18 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
                   <td>
                     {withdrawal.status === 'pending' ? (
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <button className="btn btn-success" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                        <button
+                          className="btn btn-success"
+                          style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
+                          onClick={() => handleApproveWithdrawal(withdrawal.id)}
+                        >
                           Approve
                         </button>
-                        <button className="btn btn-danger" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                        <button
+                          className="btn btn-danger"
+                          style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
+                          onClick={() => handleRejectWithdrawal(withdrawal.id)}
+                        >
                           Reject
                         </button>
                       </div>
@@ -283,7 +396,11 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
                   <td>{getStatusBadge(investment.status)}</td>
                   <td>{investment.startDate}</td>
                   <td>
-                    <button className="btn btn-primary" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                    <button
+                      className="btn btn-primary"
+                      style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
+                      onClick={() => handleViewInvestmentDetails(investment.id)}
+                    >
                       View Details
                     </button>
                   </td>
@@ -331,11 +448,19 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
                   <td>{getStatusBadge(plan.status)}</td>
                   <td>
                     <div style={{ display: 'flex', gap: '0.5rem' }}>
-                      <button className="btn btn-primary" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                      <button
+                        className="btn btn-primary"
+                        style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
+                        onClick={() => handleEditPlan(plan.id)}
+                      >
                         Edit
                       </button>
-                      <button className="btn btn-warning" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
-                        Disable
+                      <button
+                        className="btn btn-warning"
+                        style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
+                        onClick={() => handleTogglePlan(plan.id)}
+                      >
+                        {plan.status === 'active' ? 'Disable' : 'Enable'}
                       </button>
                     </div>
                   </td>
@@ -346,7 +471,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
         </div>
         
         <div style={{ marginTop: '1.5rem' }}>
-          <button className="btn btn-success">Add New Plan</button>
+          <button className="btn btn-success" onClick={handleAddNewPlan}>Add New Plan</button>
         </div>
       </div>
     </div>
