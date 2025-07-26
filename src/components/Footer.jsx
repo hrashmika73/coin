@@ -1,13 +1,31 @@
 function Footer({ siteSettings }) {
   return (
-    <footer className="footer">
-      <div className="footer-content">
+    <footer className="footer" style={{
+      background: 'linear-gradient(135deg, var(--dark-color) 0%, #2c3e50 50%, var(--primary-color) 100%)',
+      color: 'white',
+      padding: 'clamp(2rem, 4vw, 4rem) 0 var(--spacing-sm)',
+      marginTop: 'var(--spacing-xxl)'
+    }}>
+      <div className="footer-content" style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 clamp(1rem, 4vw, 2rem)',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: 'clamp(1.5rem, 3vw, 2rem)'
+      }}>
         <div className="footer-section">
-          <h3>💎 {siteSettings.siteName}</h3>
-          <p>Your trusted partner in cryptocurrency investment and trading. Join thousands of investors worldwide who have chosen our platform for secure and profitable Bitcoin trading.</p>
-          <div style={{ marginTop: '1rem' }}>
-            <span style={{ color: '#ffd700' }}>⭐⭐⭐⭐⭐</span>
-            <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>Rated 4.9/5 by 10,000+ users</p>
+          <h3 style={{ color: 'var(--accent-color)', marginBottom: 'var(--spacing-sm)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)' }}>
+            💎 {siteSettings.siteName}
+          </h3>
+          <p style={{ lineHeight: '1.6', fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>
+            Your trusted partner in cryptocurrency investment and trading. Join thousands of investors worldwide who have chosen our platform for secure and profitable Bitcoin trading.
+          </p>
+          <div style={{ marginTop: 'var(--spacing-sm)' }}>
+            <span style={{ color: '#ffd700', fontSize: '1.2rem' }}>⭐⭐⭐⭐⭐</span>
+            <p style={{ fontSize: 'clamp(0.8rem, 1.8vw, 0.9rem)', marginTop: 'var(--spacing-xs)', opacity: '0.9' }}>
+              Rated 4.9/5 by 10,000+ users
+            </p>
           </div>
         </div>
         
