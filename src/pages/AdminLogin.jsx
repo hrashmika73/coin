@@ -248,7 +248,7 @@ function AdminLogin({ onAdminLogin }) {
           </form>
 
           {/* Demo Credentials */}
-          {process.env.NODE_ENV === 'development' && (
+          {import.meta.env.MODE === 'development' && (
             <div className="demo-credentials">
               <h4>Demo Credentials:</h4>
               <div className="credential-item">
