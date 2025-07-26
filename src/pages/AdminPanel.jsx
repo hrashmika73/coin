@@ -1,8 +1,12 @@
 import { useState } from 'react';
+import UserForm from '../components/UserForm';
 
 function AdminPanel({ siteSettings, updateSiteSettings }) {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [localSettings, setLocalSettings] = useState(siteSettings);
+  const [userFormOpen, setUserFormOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
+  const [userFormMode, setUserFormMode] = useState('add');
 
 
   const [withdrawals, setWithdrawals] = useState([
@@ -78,30 +82,45 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
 
   const handleEditUser = (userId) => {
     const user = users.find(u => u.id === userId);
-    const newEmail = prompt('Enter new email:', user.email);
-    if (newEmail && newEmail !== user.email) {
-      setUsers(prev => prev.map(u =>
-        u.id === userId ? { ...u, email: newEmail } : u
-      ));
-      alert('User updated successfully!');
-    }
+    setEditingUser(user);
+    setUserFormMode('edit');
+    setUserFormOpen(true);
   };
 
   const handleAddNewUser = () => {
-    const username = prompt('Enter username:');
-    const email = prompt('Enter email:');
-    if (username && email) {
-      const newUser = {
-        id: users.length + 1,
-        username,
-        email,
-        balance: 0,
-        status: 'active',
-        joinDate: new Date().toISOString().split('T')[0]
-      };
-      setUsers(prev => [...prev, newUser]);
-      alert('User added successfully!');
+    setEditingUser(null);
+    setUserFormMode('add');
+    setUserFormOpen(true);
+  };
+
+  const handleUserFormSubmit = async (userData) => {
+    try {
+      if (userFormMode === 'add') {
+        // Add new user
+        const newUser = {
+          ...userData,
+          id: users.length + 1,
+          joinDate: new Date().toISOString().split('T')[0]
+        };
+        setUsers(prev => [...prev, newUser]);
+        alert('User added successfully!');
+      } else {
+        // Update existing user
+        setUsers(prev => prev.map(u =>
+          u.id === editingUser.id ? { ...userData, id: editingUser.id, joinDate: editingUser.joinDate } : u
+        ));
+        alert('User updated successfully!');
+      }
+    } catch (error) {
+      console.error('Error saving user:', error);
+      throw error;
     }
+  };
+
+  const handleCloseUserForm = () => {
+    setUserFormOpen(false);
+    setEditingUser(null);
+    setUserFormMode('add');
   };
 
   const handleViewInvestmentDetails = (investmentId) => {
@@ -246,7 +265,9 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
       <div className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
           <h3>All Users</h3>
-          <button className="btn btn-primary" onClick={handleAddNewUser}>Add New User</button>
+          <button className="btn btn-primary" onClick={handleAddNewUser}>
+            ➕ Add New User
+          </button>
         </div>
         
         <div className="table-container">
@@ -277,15 +298,17 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
                         className="btn btn-primary"
                         style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
                         onClick={() => handleEditUser(user.id)}
+                        title={`Edit ${user.username}`}
                       >
-                        Edit
+                        ✏️ Edit
                       </button>
                       <button
                         className="btn btn-warning"
                         style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}
                         onClick={() => handleSuspendUser(user.id)}
+                        title={`${user.status === 'active' ? 'Suspend' : 'Activate'} ${user.username}`}
                       >
-                        {user.status === 'active' ? 'Suspend' : 'Activate'}
+                        {user.status === 'active' ? '🚫 Suspend' : '✅ Activate'}
                       </button>
                     </div>
                   </td>
@@ -657,6 +680,15 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
           {activeTab === 'settings' && renderSettings()}
         </div>
       </div>
+
+      {/* User Form Modal */}
+      <UserForm
+        isOpen={userFormOpen}
+        onClose={handleCloseUserForm}
+        onSubmit={handleUserFormSubmit}
+        user={editingUser}
+        mode={userFormMode}
+      />
     </div>
   );
 }
