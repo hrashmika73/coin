@@ -1189,6 +1189,7 @@ ${kyc.reviewNotes ? 'Review Notes: ' + kyc.reviewNotes : 'No review notes yet'}`
     { id: 'withdrawals', label: '💸 Withdrawals', icon: '💸' },
     { id: 'kyc', label: '🆔 KYC Management', icon: '🆔' },
     { id: 'analytics', label: '📉 Analytics', icon: '📉' },
+    { id: 'cron', label: '🕒 Automated Tasks', icon: '🕒' },
     { id: 'settings', label: '⚙️ Settings', icon: '⚙️' }
   ];
 
