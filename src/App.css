@@ -996,3 +996,163 @@ body {
     width: 100%;
   }
 }
+
+/* Verification Form Styles */
+.verification-modal {
+  max-width: 500px;
+}
+
+.verification-content {
+  padding: 2rem;
+}
+
+.verification-sending {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.verification-sending h3 {
+  margin: 1rem 0 0.5rem;
+  color: #333;
+}
+
+.verification-sending p {
+  color: #666;
+  margin: 0;
+}
+
+.verification-info {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.verification-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.verification-info h3 {
+  color: #333;
+  margin-bottom: 1rem;
+}
+
+.verification-info p {
+  color: #666;
+  margin-bottom: 1rem;
+}
+
+.verification-target {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 25px;
+  font-weight: 600;
+  font-family: monospace;
+  margin: 1rem auto;
+  display: inline-block;
+  letter-spacing: 1px;
+}
+
+.verification-timer {
+  margin-top: 1rem;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.verification-timer .timer {
+  color: #ff6b35;
+  font-weight: 600;
+  font-family: monospace;
+  font-size: 1.1rem;
+}
+
+.verification-attempts {
+  margin-top: 0.5rem;
+  color: #ffc107;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.verification-form {
+  margin-bottom: 1.5rem;
+}
+
+.verification-input {
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.5rem;
+  font-family: monospace;
+  padding: 1rem;
+  border: 3px solid #e0e0e0;
+  border-radius: 15px;
+  width: 100%;
+  transition: all 0.3s ease;
+}
+
+.verification-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  outline: none;
+}
+
+.verification-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.verification-actions button {
+  flex: 1;
+}
+
+.verification-footer {
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.verification-footer p {
+  color: #666;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.btn-link {
+  background: none;
+  border: none;
+  color: #667eea;
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.btn-link:hover:not(.disabled) {
+  color: #764ba2;
+}
+
+.btn-link.disabled {
+  color: #ccc;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
+.dev-helper {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 10px;
+  border: 1px solid #e9ecef;
+  font-size: 0.9rem;
+}
+
+.dev-helper p {
+  margin: 0.25rem 0;
+  color: #666;
+}
+
+.dev-helper strong {
+  color: #333;
+}
