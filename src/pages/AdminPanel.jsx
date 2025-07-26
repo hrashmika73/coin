@@ -938,6 +938,7 @@ ${kyc.reviewNotes ? 'Review Notes: ' + kyc.reviewNotes : 'No review notes yet'}`
     { id: 'investments', label: '📈 Investments', icon: '📈' },
     { id: 'withdrawals', label: '💸 Withdrawals', icon: '💸' },
     { id: 'kyc', label: '🆔 KYC Management', icon: '🆔' },
+    { id: 'analytics', label: '📉 Analytics', icon: '📉' },
     { id: 'settings', label: '⚙️ Settings', icon: '⚙️' }
   ];
 
@@ -1005,6 +1006,7 @@ ${kyc.reviewNotes ? 'Review Notes: ' + kyc.reviewNotes : 'No review notes yet'}`
             {activeTab === 'investments' && renderInvestments()}
             {activeTab === 'withdrawals' && renderWithdrawals()}
             {activeTab === 'kyc' && renderKYC()}
+            {activeTab === 'analytics' && renderAnalytics()}
             {activeTab === 'settings' && renderSettings()}
           </div>
         </div>
