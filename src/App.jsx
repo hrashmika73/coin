@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import NotificationSystem from './components/NotificationSystem';
 import Home from './pages/Home';
 import About from './pages/About';
 import WhyChoose from './pages/WhyChoose';
@@ -66,9 +67,10 @@ function App() {
   return (
     <Router>
       <div className="App" style={{ '--primary-color': siteSettings.primaryColor }}>
-        <Header 
-          user={user} 
-          logout={logout} 
+        <NotificationSystem />
+        <Header
+          user={user}
+          logout={logout}
           siteSettings={siteSettings}
           isAdmin={isAdmin}
         />
