@@ -1,5 +1,6 @@
 // Verification Service for Email and SMS
 import apiService from './api';
+import backendVerificationService from './backend-verification';
 import { showNotification } from '../components/NotificationSystem';
 
 class VerificationService {
@@ -209,31 +210,43 @@ class VerificationService {
 
   // Simulation methods for development
   async simulateEmailSend(email, code) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // In development, log the code to console
-    console.log(`📧 EMAIL VERIFICATION CODE for ${email}: ${code}`);
-    
-    // Store in localStorage for easy testing
-    localStorage.setItem('lastEmailCode', code);
-    localStorage.setItem('lastEmailTarget', email);
-    
-    return { success: true };
+    try {
+      // Use backend verification service for email sending
+      const result = await backendVerificationService.sendVerificationEmail(email, code);
+
+      // Store in localStorage for easy testing
+      localStorage.setItem('lastEmailCode', code);
+      localStorage.setItem('lastEmailTarget', email);
+
+      return result;
+    } catch (error) {
+      console.error('Email send error:', error);
+      // Fallback to simple console log
+      console.log(`📧 EMAIL VERIFICATION CODE for ${email}: ${code}`);
+      localStorage.setItem('lastEmailCode', code);
+      localStorage.setItem('lastEmailTarget', email);
+      return { success: true };
+    }
   }
 
   async simulateSMSSend(phoneNumber, code) {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // In development, log the code to console
-    console.log(`📱 SMS VERIFICATION CODE for ${phoneNumber}: ${code}`);
-    
-    // Store in localStorage for easy testing
-    localStorage.setItem('lastSMSCode', code);
-    localStorage.setItem('lastSMSTarget', phoneNumber);
-    
-    return { success: true };
+    try {
+      // Use backend verification service for SMS sending
+      const result = await backendVerificationService.sendVerificationSMS(phoneNumber, code);
+
+      // Store in localStorage for easy testing
+      localStorage.setItem('lastSMSCode', code);
+      localStorage.setItem('lastSMSTarget', phoneNumber);
+
+      return result;
+    } catch (error) {
+      console.error('SMS send error:', error);
+      // Fallback to simple console log
+      console.log(`📱 SMS VERIFICATION CODE for ${phoneNumber}: ${code}`);
+      localStorage.setItem('lastSMSCode', code);
+      localStorage.setItem('lastSMSTarget', phoneNumber);
+      return { success: true };
+    }
   }
 
   // Get verification status
