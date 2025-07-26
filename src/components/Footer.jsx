@@ -173,39 +173,84 @@ function Footer({ siteSettings }) {
         </div>
       </div>
       
-      <div className="footer-bottom">
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
+      <div className="footer-bottom" style={{
+        textAlign: 'center',
+        marginTop: 'var(--spacing-lg)',
+        paddingTop: 'var(--spacing-lg)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.2)'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '1rem'
+          gap: 'clamp(1rem, 3vw, 2rem)',
+          marginBottom: 'var(--spacing-lg)'
         }}>
-          <p>
-            © 2024 {siteSettings.siteName}. All rights reserved. 
+          <p style={{
+            fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+            margin: 0,
+            textAlign: 'left'
+          }}>
+            © 2024 {siteSettings.siteName}. All rights reserved.
             <span style={{ color: '#ffd700' }}> Made with ❤️ for crypto enthusiasts worldwide</span>
           </p>
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Privacy Policy</a>
-            <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Terms of Service</a>
-            <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Risk Disclosure</a>
+          <div style={{
+            display: 'flex',
+            gap: 'clamp(1rem, 3vw, 2rem)',
+            flexWrap: 'wrap'
+          }}>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+              transition: 'color 0.3s ease',
+              opacity: '0.9'
+            }}>Privacy Policy</a>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+              transition: 'color 0.3s ease',
+              opacity: '0.9'
+            }}>Terms of Service</a>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+              transition: 'color 0.3s ease',
+              opacity: '0.9'
+            }}>Risk Disclosure</a>
           </div>
         </div>
-        
-        <div style={{ 
-          marginTop: '2rem', 
-          padding: '1rem', 
+
+        <div style={{
+          marginTop: 'var(--spacing-lg)',
+          padding: 'clamp(1rem, 3vw, 1.5rem)',
           background: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '15px',
-          textAlign: 'center'
+          borderRadius: 'var(--border-radius-small)',
+          textAlign: 'center',
+          backdropFilter: 'blur(10px)'
         }}>
-          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+          <p style={{
+            fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+            marginBottom: 'var(--spacing-xs)',
+            opacity: '0.95'
+          }}>
             🔒 <strong>Security Notice:</strong> Your investments are protected by bank-level security
           </p>
-          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+          <p style={{
+            fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+            marginBottom: 'var(--spacing-xs)',
+            opacity: '0.95'
+          }}>
             🌍 <strong>Global Reach:</strong> Serving clients in 150+ countries worldwide
           </p>
-          <p style={{ fontSize: '0.9rem' }}>
+          <p style={{
+            fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+            margin: 0,
+            opacity: '0.95'
+          }}>
             ⚡ <strong>24/7 Support:</strong> Round-the-clock customer service in multiple languages
           </p>
         </div>
