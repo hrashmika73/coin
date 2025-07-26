@@ -30,22 +30,54 @@ function Footer({ siteSettings }) {
         </div>
         
         <div className="footer-section">
-          <h3>🚀 Quick Links</h3>
+          <h3 style={{ color: 'var(--accent-color)', marginBottom: 'var(--spacing-sm)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)' }}>
+            🚀 Quick Links
+          </h3>
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/about" style={{ color: 'white', textDecoration: 'none' }}>📖 About Us</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/about" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>📖 About Us</a>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/plans" style={{ color: 'white', textDecoration: 'none' }}>💰 Investment Plans</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/plans" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>💰 Investment Plans</a>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/how-it-works" style={{ color: 'white', textDecoration: 'none' }}>⚙️ How It Works</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/how-it-works" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>⚙️ How It Works</a>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/faq" style={{ color: 'white', textDecoration: 'none' }}>❓ FAQ</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/faq" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>❓ FAQ</a>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/testimonials" style={{ color: 'white', textDecoration: 'none' }}>💬 Testimonials</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/testimonials" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>💬 Testimonials</a>
             </li>
           </ul>
         </div>
