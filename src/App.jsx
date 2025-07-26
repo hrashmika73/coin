@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Header from './components/Header';
 import Footer from './components/Footer';
 import NotificationSystem from './components/NotificationSystem';
+import LiveChat from './components/LiveChat';
 import Home from './pages/Home';
 import About from './pages/About';
 import WhyChoose from './pages/WhyChoose';
@@ -68,6 +69,7 @@ function App() {
     <Router>
       <div className="App" style={{ '--primary-color': siteSettings.primaryColor }}>
         <NotificationSystem />
+        <LiveChat />
         <Header
           user={user}
           logout={logout}
