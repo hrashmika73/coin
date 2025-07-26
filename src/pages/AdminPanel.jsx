@@ -1258,6 +1258,7 @@ ${kyc.reviewNotes ? 'Review Notes: ' + kyc.reviewNotes : 'No review notes yet'}`
             {activeTab === 'withdrawals' && renderWithdrawals()}
             {activeTab === 'kyc' && renderKYC()}
             {activeTab === 'analytics' && renderAnalytics()}
+            {activeTab === 'cron' && <CronManager />}
             {activeTab === 'settings' && renderSettings()}
           </div>
         </div>
