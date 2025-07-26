@@ -772,12 +772,13 @@ body {
 }
 
 .stat-value {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
   background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--spacing-xs);
+  line-height: 1.1;
 }
 
 .stat-label {
