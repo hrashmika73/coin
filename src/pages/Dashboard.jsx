@@ -1,5 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import WalletBalance from '../components/WalletBalance';
+import CryptoNewsFeed from '../components/CryptoNewsFeed';
+import PDFReportGenerator from '../components/PDFReportGenerator';
+import { showNotification } from '../components/NotificationSystem';
 
 function Dashboard({ user, siteSettings }) {
   const [stats, setStats] = useState({
@@ -39,6 +43,9 @@ function Dashboard({ user, siteSettings }) {
       dailyReturn: 7.5
     }
   ]);
+
+  const [activeTab, setActiveTab] = useState('overview');
+  const [showReferralModal, setShowReferralModal] = useState(false);
 
   const [transactions, setTransactions] = useState([
     {
