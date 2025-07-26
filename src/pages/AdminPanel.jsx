@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import UserForm from '../components/UserForm';
+import LoadingSpinner from '../components/LoadingSpinner';
 import apiService from '../services/api';
 import { showNotification } from '../components/NotificationSystem';
 
@@ -697,51 +698,59 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
         <p>Manage your {siteSettings.siteName} platform</p>
       </div>
 
-      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-        {/* Sidebar */}
-        <div style={{
-          minWidth: '250px',
-          background: 'rgba(255, 255, 255, 0.95)',
-          backdropFilter: 'blur(10px)',
-          borderRadius: '20px',
-          padding: '1.5rem',
-          height: 'fit-content',
-          position: 'sticky',
-          top: '100px'
-        }}>
-          <h3 style={{ marginBottom: '1.5rem', color: '#667eea' }}>Navigation</h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-            {tabs.map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                style={{
-                  background: activeTab === tab.id ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'transparent',
-                  color: activeTab === tab.id ? 'white' : '#333',
-                  border: 'none',
-                  padding: '1rem',
-                  borderRadius: '15px',
-                  textAlign: 'left',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  fontWeight: activeTab === tab.id ? 'bold' : 'normal'
-                }}
-              >
-                {tab.label}
-              </button>
-            ))}
+      {loading && (
+        <div style={{ textAlign: 'center', margin: '2rem 0' }}>
+          <LoadingSpinner size="large" message="Loading admin data..." />
+        </div>
+      )}
+
+      {!loading && (
+        <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+          {/* Sidebar */}
+          <div style={{
+            minWidth: '250px',
+            background: 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '20px',
+            padding: '1.5rem',
+            height: 'fit-content',
+            position: 'sticky',
+            top: '100px'
+          }}>
+            <h3 style={{ marginBottom: '1.5rem', color: '#667eea' }}>Navigation</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              {tabs.map(tab => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  style={{
+                    background: activeTab === tab.id ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'transparent',
+                    color: activeTab === tab.id ? 'white' : '#333',
+                    border: 'none',
+                    padding: '1rem',
+                    borderRadius: '15px',
+                    textAlign: 'left',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    fontWeight: activeTab === tab.id ? 'bold' : 'normal'
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div style={{ flex: 1 }} className="admin-content">
+            {activeTab === 'dashboard' && renderDashboard()}
+            {activeTab === 'users' && renderUsers()}
+            {activeTab === 'investments' && renderInvestments()}
+            {activeTab === 'withdrawals' && renderWithdrawals()}
+            {activeTab === 'settings' && renderSettings()}
           </div>
         </div>
-
-        {/* Main Content */}
-        <div style={{ flex: 1 }} className="admin-content">
-          {activeTab === 'dashboard' && renderDashboard()}
-          {activeTab === 'users' && renderUsers()}
-          {activeTab === 'investments' && renderInvestments()}
-          {activeTab === 'withdrawals' && renderWithdrawals()}
-          {activeTab === 'settings' && renderSettings()}
-        </div>
-      </div>
+      )}
 
       {/* User Form Modal */}
       <UserForm
