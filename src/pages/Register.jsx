@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import VerificationForm from '../components/VerificationForm';
+import backendVerificationService from '../services/backend-verification';
 import { showNotification } from '../components/NotificationSystem';
 
 function Register({ onRegister }) {
@@ -108,7 +109,18 @@ function Register({ onRegister }) {
         balance: 10, // Welcome bonus
         joinDate: new Date().toISOString().split('T')[0]
       };
-      
+
+      // Send welcome messages
+      try {
+        await Promise.all([
+          backendVerificationService.sendWelcomeEmail(user.email, user),
+          backendVerificationService.sendWelcomeSMS(user.phone, user)
+        ]);
+        console.log('Welcome messages sent successfully');
+      } catch (error) {
+        console.warn('Failed to send welcome messages:', error);
+      }
+
       showNotification('success', 'Account created successfully! Welcome to Kleverscape!');
       onRegister(user);
     } catch (err) {
