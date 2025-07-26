@@ -1,122 +1,256 @@
 function Footer({ siteSettings }) {
   return (
-    <footer className="footer">
-      <div className="footer-content">
+    <footer className="footer" style={{
+      background: 'linear-gradient(135deg, var(--dark-color) 0%, #2c3e50 50%, var(--primary-color) 100%)',
+      color: 'white',
+      padding: 'clamp(2rem, 4vw, 4rem) 0 var(--spacing-sm)',
+      marginTop: 'var(--spacing-xxl)'
+    }}>
+      <div className="footer-content" style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '0 clamp(1rem, 4vw, 2rem)',
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: 'clamp(1.5rem, 3vw, 2rem)'
+      }}>
         <div className="footer-section">
-          <h3>💎 {siteSettings.siteName}</h3>
-          <p>Your trusted partner in cryptocurrency investment and trading. Join thousands of investors worldwide who have chosen our platform for secure and profitable Bitcoin trading.</p>
-          <div style={{ marginTop: '1rem' }}>
-            <span style={{ color: '#ffd700' }}>⭐⭐⭐⭐⭐</span>
-            <p style={{ fontSize: '0.9rem', marginTop: '0.5rem' }}>Rated 4.9/5 by 10,000+ users</p>
+          <h3 style={{ color: 'var(--accent-color)', marginBottom: 'var(--spacing-sm)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)' }}>
+            💎 {siteSettings.siteName}
+          </h3>
+          <p style={{ lineHeight: '1.6', fontSize: 'clamp(0.9rem, 2vw, 1rem)' }}>
+            Your trusted partner in cryptocurrency investment and trading. Join thousands of investors worldwide who have chosen our platform for secure and profitable Bitcoin trading.
+          </p>
+          <div style={{ marginTop: 'var(--spacing-sm)' }}>
+            <span style={{ color: '#ffd700', fontSize: '1.2rem' }}>⭐⭐⭐⭐⭐</span>
+            <p style={{ fontSize: 'clamp(0.8rem, 1.8vw, 0.9rem)', marginTop: 'var(--spacing-xs)', opacity: '0.9' }}>
+              Rated 4.9/5 by 10,000+ users
+            </p>
           </div>
         </div>
         
         <div className="footer-section">
-          <h3>🚀 Quick Links</h3>
+          <h3 style={{ color: 'var(--accent-color)', marginBottom: 'var(--spacing-sm)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)' }}>
+            🚀 Quick Links
+          </h3>
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/about" style={{ color: 'white', textDecoration: 'none' }}>📖 About Us</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/about" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>📖 About Us</a>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/plans" style={{ color: 'white', textDecoration: 'none' }}>💰 Investment Plans</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/plans" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>💰 Investment Plans</a>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/how-it-works" style={{ color: 'white', textDecoration: 'none' }}>⚙️ How It Works</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/how-it-works" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>⚙️ How It Works</a>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/faq" style={{ color: 'white', textDecoration: 'none' }}>❓ FAQ</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/faq" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>❓ FAQ</a>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <a href="/testimonials" style={{ color: 'white', textDecoration: 'none' }}>💬 Testimonials</a>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <a href="/testimonials" style={{
+                color: 'white',
+                textDecoration: 'none',
+                fontSize: 'clamp(0.9rem, 2vw, 1rem)',
+                transition: 'color 0.3s ease',
+                opacity: '0.9'
+              }}>💬 Testimonials</a>
             </li>
           </ul>
         </div>
         
         <div className="footer-section">
-          <h3>💼 Services</h3>
+          <h3 style={{ color: 'var(--accent-color)', marginBottom: 'var(--spacing-sm)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)' }}>
+            💼 Services
+          </h3>
           <ul style={{ listStyle: 'none', padding: 0 }}>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>₿ Bitcoin Trading</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>₿ Bitcoin Trading</span>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>💎 Cryptocurrency Investment</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>💎 Cryptocurrency Investment</span>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>📈 Portfolio Management</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>📈 Portfolio Management</span>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>💰 Profit Maximization</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>💰 Profit Maximization</span>
             </li>
-            <li style={{ marginBottom: '0.5rem' }}>
-              <span style={{ color: 'white' }}>🔒 Secure Transactions</span>
+            <li style={{ marginBottom: 'var(--spacing-xs)' }}>
+              <span style={{ color: 'white', fontSize: 'clamp(0.9rem, 2vw, 1rem)', opacity: '0.9' }}>🔒 Secure Transactions</span>
             </li>
           </ul>
         </div>
         
         <div className="footer-section">
-          <h3>📞 Contact Info</h3>
-          <div style={{ marginBottom: '1rem' }}>
-            <p>
+          <h3 style={{ color: 'var(--accent-color)', marginBottom: 'var(--spacing-sm)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)' }}>
+            📞 Contact Info
+          </h3>
+          <div style={{ marginBottom: 'var(--spacing-sm)' }}>
+            <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)', marginBottom: 'var(--spacing-xs)' }}>
               <strong>📧 Email:</strong><br />
-              <a href={`mailto:${siteSettings.contactEmail}`} style={{ color: '#ffd700' }}>
+              <a href={`mailto:${siteSettings.contactEmail}`} style={{
+                color: '#ffd700',
+                textDecoration: 'none',
+                transition: 'color 0.3s ease'
+              }}>
                 {siteSettings.contactEmail}
               </a>
             </p>
           </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <p>
+          <div style={{ marginBottom: 'var(--spacing-sm)' }}>
+            <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)', marginBottom: 'var(--spacing-xs)' }}>
               <strong>📱 Phone:</strong><br />
-              <a href={`tel:${siteSettings.supportPhone}`} style={{ color: '#ffd700' }}>
+              <a href={`tel:${siteSettings.supportPhone}`} style={{
+                color: '#ffd700',
+                textDecoration: 'none',
+                transition: 'color 0.3s ease'
+              }}>
                 {siteSettings.supportPhone}
               </a>
             </p>
           </div>
           <div>
-            <h4 style={{ color: '#ffd700', marginBottom: '0.5rem' }}>🌐 Follow Us</h4>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>📘</a>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>🐦</a>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>📸</a>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>💼</a>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>📱</a>
+            <h4 style={{ color: '#ffd700', marginBottom: 'var(--spacing-xs)', fontSize: 'clamp(1rem, 2.2vw, 1.2rem)' }}>
+              🌐 Follow Us
+            </h4>
+            <div style={{
+              display: 'flex',
+              gap: 'var(--spacing-sm)',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start'
+            }}>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>📘</a>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>🐦</a>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>📸</a>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>💼</a>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>📱</a>
             </div>
           </div>
         </div>
       </div>
       
-      <div className="footer-bottom">
-        <div style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
+      <div className="footer-bottom" style={{
+        textAlign: 'center',
+        marginTop: 'var(--spacing-lg)',
+        paddingTop: 'var(--spacing-lg)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.2)'
+      }}>
+        <div style={{
+          display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '1rem'
+          gap: 'clamp(1rem, 3vw, 2rem)',
+          marginBottom: 'var(--spacing-lg)'
         }}>
-          <p>
-            © 2024 {siteSettings.siteName}. All rights reserved. 
+          <p style={{
+            fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+            margin: 0,
+            textAlign: 'left'
+          }}>
+            © 2024 {siteSettings.siteName}. All rights reserved.
             <span style={{ color: '#ffd700' }}> Made with ❤️ for crypto enthusiasts worldwide</span>
           </p>
-          <div style={{ display: 'flex', gap: '2rem' }}>
-            <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Privacy Policy</a>
-            <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Terms of Service</a>
-            <a href="#" style={{ color: 'white', textDecoration: 'none' }}>Risk Disclosure</a>
+          <div style={{
+            display: 'flex',
+            gap: 'clamp(1rem, 3vw, 2rem)',
+            flexWrap: 'wrap'
+          }}>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+              transition: 'color 0.3s ease',
+              opacity: '0.9'
+            }}>Privacy Policy</a>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+              transition: 'color 0.3s ease',
+              opacity: '0.9'
+            }}>Terms of Service</a>
+            <a href="#" style={{
+              color: 'white',
+              textDecoration: 'none',
+              fontSize: 'clamp(0.8rem, 2vw, 0.95rem)',
+              transition: 'color 0.3s ease',
+              opacity: '0.9'
+            }}>Risk Disclosure</a>
           </div>
         </div>
-        
-        <div style={{ 
-          marginTop: '2rem', 
-          padding: '1rem', 
+
+        <div style={{
+          marginTop: 'var(--spacing-lg)',
+          padding: 'clamp(1rem, 3vw, 1.5rem)',
           background: 'rgba(255, 255, 255, 0.1)',
-          borderRadius: '15px',
-          textAlign: 'center'
+          borderRadius: 'var(--border-radius-small)',
+          textAlign: 'center',
+          backdropFilter: 'blur(10px)'
         }}>
-          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+          <p style={{
+            fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+            marginBottom: 'var(--spacing-xs)',
+            opacity: '0.95'
+          }}>
             🔒 <strong>Security Notice:</strong> Your investments are protected by bank-level security
           </p>
-          <p style={{ fontSize: '0.9rem', marginBottom: '0.5rem' }}>
+          <p style={{
+            fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+            marginBottom: 'var(--spacing-xs)',
+            opacity: '0.95'
+          }}>
             🌍 <strong>Global Reach:</strong> Serving clients in 150+ countries worldwide
           </p>
-          <p style={{ fontSize: '0.9rem' }}>
+          <p style={{
+            fontSize: 'clamp(0.8rem, 2vw, 0.9rem)',
+            margin: 0,
+            opacity: '0.95'
+          }}>
             ⚡ <strong>24/7 Support:</strong> Round-the-clock customer service in multiple languages
           </p>
         </div>
