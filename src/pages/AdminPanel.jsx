@@ -819,6 +819,255 @@ ${kyc.reviewNotes ? 'Review Notes: ' + kyc.reviewNotes : 'No review notes yet'}`
     </div>
   );
 
+  const renderAnalytics = () => {
+    const analyticsData = {
+      userGrowth: [
+        { month: 'Jan', users: 120, active: 98 },
+        { month: 'Feb', users: 240, active: 210 },
+        { month: 'Mar', users: 380, active: 340 },
+        { month: 'Apr', users: 520, active: 465 },
+        { month: 'May', users: 680, active: 612 },
+        { month: 'Jun', users: 850, active: 765 }
+      ],
+      revenueData: [
+        { month: 'Jan', revenue: 12500, profit: 8750 },
+        { month: 'Feb', revenue: 18200, profit: 12740 },
+        { month: 'Mar', revenue: 24800, profit: 17360 },
+        { month: 'Apr', revenue: 31500, profit: 22050 },
+        { month: 'May', revenue: 38900, profit: 27230 },
+        { month: 'Jun', revenue: 45600, profit: 31920 }
+      ],
+      topCountries: [
+        { country: 'United States', users: 285, percentage: 33.5 },
+        { country: 'United Kingdom', users: 156, percentage: 18.4 },
+        { country: 'Germany', users: 98, percentage: 11.5 },
+        { country: 'Canada', users: 87, percentage: 10.2 },
+        { country: 'Australia', users: 64, percentage: 7.5 },
+        { country: 'Others', users: 160, percentage: 18.9 }
+      ]
+    };
+
+    return (
+      <div>
+        <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>📊 Platform Analytics</h2>
+
+        {/* Key Metrics */}
+        <div className="analytics-overview">
+          <div className="metric-card revenue">
+            <div className="metric-icon">💰</div>
+            <div className="metric-info">
+              <div className="metric-value">{formatCurrency(185500)}</div>
+              <div className="metric-label">Total Revenue</div>
+              <div className="metric-change positive">+15.3% from last month</div>
+            </div>
+          </div>
+
+          <div className="metric-card users">
+            <div className="metric-icon">👥</div>
+            <div className="metric-info">
+              <div className="metric-value">2,847</div>
+              <div className="metric-label">Total Users</div>
+              <div className="metric-change positive">+8.7% from last month</div>
+            </div>
+          </div>
+
+          <div className="metric-card investments">
+            <div className="metric-icon">📈</div>
+            <div className="metric-info">
+              <div className="metric-value">{formatCurrency(1240000)}</div>
+              <div className="metric-label">Total Investments</div>
+              <div className="metric-change positive">+22.1% from last month</div>
+            </div>
+          </div>
+
+          <div className="metric-card conversion">
+            <div className="metric-icon">🎯</div>
+            <div className="metric-info">
+              <div className="metric-value">3.2%</div>
+              <div className="metric-label">Conversion Rate</div>
+              <div className="metric-change positive">+0.4% from last month</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Charts Section */}
+        <div className="charts-grid">
+          {/* User Growth Chart */}
+          <div className="chart-card">
+            <div className="chart-header">
+              <h3>👥 User Growth</h3>
+              <div className="chart-controls">
+                <select className="chart-filter">
+                  <option>Last 6 months</option>
+                  <option>Last year</option>
+                  <option>All time</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="chart-content">
+              <div className="chart-legend">
+                <div className="legend-item">
+                  <span className="legend-color total-users"></span>
+                  <span>Total Users</span>
+                </div>
+                <div className="legend-item">
+                  <span className="legend-color active-users"></span>
+                  <span>Active Users</span>
+                </div>
+              </div>
+
+              <div className="simple-chart">
+                {analyticsData.userGrowth.map((data, index) => (
+                  <div key={index} className="chart-bar-group">
+                    <div className="chart-bars">
+                      <div
+                        className="chart-bar total-users"
+                        style={{ height: `${(data.users / 850) * 100}%` }}
+                        title={`${data.users} total users`}
+                      ></div>
+                      <div
+                        className="chart-bar active-users"
+                        style={{ height: `${(data.active / 850) * 100}%` }}
+                        title={`${data.active} active users`}
+                      ></div>
+                    </div>
+                    <div className="chart-label">{data.month}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Revenue Chart */}
+          <div className="chart-card">
+            <div className="chart-header">
+              <h3>💰 Revenue & Profit</h3>
+              <div className="chart-controls">
+                <select className="chart-filter">
+                  <option>Monthly</option>
+                  <option>Weekly</option>
+                  <option>Daily</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="chart-content">
+              <div className="chart-legend">
+                <div className="legend-item">
+                  <span className="legend-color revenue"></span>
+                  <span>Revenue</span>
+                </div>
+                <div className="legend-item">
+                  <span className="legend-color profit"></span>
+                  <span>Profit</span>
+                </div>
+              </div>
+
+              <div className="simple-chart">
+                {analyticsData.revenueData.map((data, index) => (
+                  <div key={index} className="chart-bar-group">
+                    <div className="chart-bars">
+                      <div
+                        className="chart-bar revenue"
+                        style={{ height: `${(data.revenue / 50000) * 100}%` }}
+                        title={formatCurrency(data.revenue)}
+                      ></div>
+                      <div
+                        className="chart-bar profit"
+                        style={{ height: `${(data.profit / 50000) * 100}%` }}
+                        title={formatCurrency(data.profit)}
+                      ></div>
+                    </div>
+                    <div className="chart-label">{data.month}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Geographic Distribution */}
+          <div className="chart-card">
+            <div className="chart-header">
+              <h3>🌍 User Distribution by Country</h3>
+            </div>
+
+            <div className="chart-content">
+              <div className="country-distribution">
+                {analyticsData.topCountries.map((country, index) => (
+                  <div key={index} className="country-item">
+                    <div className="country-info">
+                      <span className="country-name">{country.country}</span>
+                      <span className="country-users">{country.users} users</span>
+                    </div>
+                    <div className="country-bar">
+                      <div
+                        className="country-fill"
+                        style={{ width: `${country.percentage}%` }}
+                      ></div>
+                    </div>
+                    <span className="country-percentage">{country.percentage}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Performance Metrics */}
+          <div className="chart-card">
+            <div className="chart-header">
+              <h3>⚡ Performance Metrics</h3>
+            </div>
+
+            <div className="chart-content">
+              <div className="performance-grid">
+                <div className="performance-item">
+                  <div className="performance-label">Avg Session Duration</div>
+                  <div className="performance-value">12m 34s</div>
+                  <div className="performance-change positive">+2.1%</div>
+                </div>
+                <div className="performance-item">
+                  <div className="performance-label">Page Load Time</div>
+                  <div className="performance-value">1.2s</div>
+                  <div className="performance-change positive">-0.3s</div>
+                </div>
+                <div className="performance-item">
+                  <div className="performance-label">Bounce Rate</div>
+                  <div className="performance-value">24.5%</div>
+                  <div className="performance-change negative">+1.2%</div>
+                </div>
+                <div className="performance-item">
+                  <div className="performance-label">API Response Time</div>
+                  <div className="performance-value">185ms</div>
+                  <div className="performance-change positive">-15ms</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Export Options */}
+        <div className="analytics-actions">
+          <h3>📊 Export Reports</h3>
+          <div className="export-options">
+            <button className="btn btn-primary">
+              📊 Export Analytics Report
+            </button>
+            <button className="btn btn-secondary">
+              📈 Download User Data
+            </button>
+            <button className="btn btn-success">
+              💰 Revenue Report
+            </button>
+            <button className="btn btn-warning">
+              📧 Email Weekly Summary
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   const renderSettings = () => (
     <div>
       <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>⚙️ Site Settings</h2>
