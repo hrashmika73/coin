@@ -19,6 +19,7 @@ import AdminLogin from './pages/AdminLogin';
 import EmailVerification from './pages/EmailVerification';
 import Deposit from './pages/Deposit';
 import Withdraw from './pages/Withdraw';
+import { cronService } from './services/cronService';
 import './App.css';
 
 function App() {
