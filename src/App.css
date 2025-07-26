@@ -46,20 +46,25 @@ body {
   z-index: 1000;
   background: linear-gradient(135deg, var(--primary-color) 0%, #667eea 50%, var(--secondary-color) 100%);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  padding: 1rem 0;
+  padding: 0.75rem 0;
+  height: 70px;
+  display: flex;
+  align-items: center;
 }
 
 .header-container {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
+  width: 100%;
+  position: relative;
 }
 
 .logo {
-  font-size: 2rem;
+  font-size: 1.8rem;
   font-weight: 800;
   color: white;
   text-decoration: none;
@@ -67,23 +72,63 @@ body {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  z-index: 1001;
+}
+
+/* Mobile Menu Button */
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 1001;
+}
+
+.mobile-menu-btn span {
+  width: 2rem;
+  height: 0.25rem;
+  background: white;
+  border-radius: 10px;
+  transition: all 0.3s linear;
+  transform-origin: 1px;
 }
 
 .nav {
   display: flex;
-  gap: 2rem;
   align-items: center;
+  gap: 1rem;
+}
+
+.nav-links {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.nav-actions {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  margin-left: 1rem;
 }
 
 .nav-link {
   color: white;
   text-decoration: none;
   font-weight: 500;
-  padding: 0.5rem 1rem;
-  border-radius: 25px;
+  padding: 0.5rem 0.75rem;
+  border-radius: 20px;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 .nav-link:hover {
@@ -93,6 +138,58 @@ body {
 
 .nav-link.active {
   background: rgba(255, 255, 255, 0.3);
+}
+
+.dashboard-link, .admin-link {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.user-welcome {
+  color: white;
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* Button Styles for Header */
+.btn-login, .btn-signup, .btn-logout {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  display: inline-block;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.btn-login {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-signup {
+  background: linear-gradient(135deg, #ffd700, #ff6b35);
+  color: #333;
+}
+
+.btn-logout {
+  background: rgba(255, 107, 53, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 107, 53, 0.5);
+}
+
+.btn-login:hover, .btn-signup:hover, .btn-logout:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Button Styles */
