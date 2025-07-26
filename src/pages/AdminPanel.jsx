@@ -15,7 +15,58 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
     { type: 'New user registration', description: 'john_doe joined 2 hours ago', time: '2 hours ago' },
     { type: 'Investment created', description: '$2,500 Pro Plan investment by jane_smith', time: '4 hours ago' },
     { type: 'Withdrawal request', description: '$500 BTC withdrawal pending approval', time: '6 hours ago' },
-    { type: 'User status updated', description: 'crypto_trader account activated', time: '8 hours ago' }
+    { type: 'KYC submission', description: 'crypto_trader submitted KYC documents', time: '8 hours ago' }
+  ]);
+
+  const [kycSubmissions, setKycSubmissions] = useState([
+    {
+      id: 1,
+      userId: 1,
+      username: 'john_doe',
+      email: 'john@example.com',
+      fullName: 'John Doe',
+      documentType: 'passport',
+      documentNumber: 'P123456789',
+      frontImage: 'https://via.placeholder.com/300x200/667eea/ffffff?text=ID+Front',
+      backImage: 'https://via.placeholder.com/300x200/667eea/ffffff?text=ID+Back',
+      selfieImage: 'https://via.placeholder.com/300x200/667eea/ffffff?text=Selfie',
+      status: 'pending',
+      submissionDate: '2024-01-20',
+      reviewDate: null,
+      reviewNotes: ''
+    },
+    {
+      id: 2,
+      userId: 2,
+      username: 'jane_smith',
+      email: 'jane@example.com',
+      fullName: 'Jane Smith',
+      documentType: 'driver_license',
+      documentNumber: 'DL987654321',
+      frontImage: 'https://via.placeholder.com/300x200/28a745/ffffff?text=ID+Front',
+      backImage: 'https://via.placeholder.com/300x200/28a745/ffffff?text=ID+Back',
+      selfieImage: 'https://via.placeholder.com/300x200/28a745/ffffff?text=Selfie',
+      status: 'approved',
+      submissionDate: '2024-01-18',
+      reviewDate: '2024-01-19',
+      reviewNotes: 'All documents verified successfully'
+    },
+    {
+      id: 3,
+      userId: 3,
+      username: 'crypto_trader',
+      email: 'trader@example.com',
+      fullName: 'Alex Johnson',
+      documentType: 'national_id',
+      documentNumber: 'ID456789123',
+      frontImage: 'https://via.placeholder.com/300x200/dc3545/ffffff?text=ID+Front',
+      backImage: 'https://via.placeholder.com/300x200/dc3545/ffffff?text=ID+Back',
+      selfieImage: 'https://via.placeholder.com/300x200/dc3545/ffffff?text=Selfie',
+      status: 'rejected',
+      submissionDate: '2024-01-15',
+      reviewDate: '2024-01-16',
+      reviewNotes: 'Document quality too poor, please resubmit with clearer images'
+    }
   ]);
 
 
@@ -234,6 +285,57 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
       setInvestmentPlans(prev => [...prev, newPlan]);
       showNotification('success', 'New plan added successfully!');
     }
+  };
+
+  // KYC Management Functions
+  const handleApproveKYC = async (kycId) => {
+    try {
+      setKycSubmissions(prev => prev.map(kyc =>
+        kyc.id === kycId ? {
+          ...kyc,
+          status: 'approved',
+          reviewDate: new Date().toISOString().split('T')[0],
+          reviewNotes: 'Documents verified and approved'
+        } : kyc
+      ));
+      showNotification('success', 'KYC approved successfully!');
+    } catch (error) {
+      showNotification('error', 'Failed to approve KYC');
+    }
+  };
+
+  const handleRejectKYC = async (kycId) => {
+    const reason = prompt('Enter rejection reason:');
+    if (!reason) return;
+
+    try {
+      setKycSubmissions(prev => prev.map(kyc =>
+        kyc.id === kycId ? {
+          ...kyc,
+          status: 'rejected',
+          reviewDate: new Date().toISOString().split('T')[0],
+          reviewNotes: reason
+        } : kyc
+      ));
+      showNotification('warning', 'KYC rejected');
+    } catch (error) {
+      showNotification('error', 'Failed to reject KYC');
+    }
+  };
+
+  const handleViewKYCDetails = (kyc) => {
+    // In a real app, this would open a detailed modal
+    const details = `
+KYC Details for ${kyc.fullName}:
+
+Document Type: ${kyc.documentType.replace('_', ' ').toUpperCase()}
+Document Number: ${kyc.documentNumber}
+Submission Date: ${kyc.submissionDate}
+Status: ${kyc.status.toUpperCase()}
+
+${kyc.reviewNotes ? 'Review Notes: ' + kyc.reviewNotes : 'No review notes yet'}`;
+
+    alert(details);
   };
 
   const formatCurrency = (amount) => {
@@ -681,6 +783,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
     { id: 'users', label: '👥 Users', icon: '👥' },
     { id: 'investments', label: '📈 Investments', icon: '📈' },
     { id: 'withdrawals', label: '💸 Withdrawals', icon: '💸' },
+    { id: 'kyc', label: '🆔 KYC Management', icon: '🆔' },
     { id: 'settings', label: '⚙️ Settings', icon: '⚙️' }
   ];
 
@@ -747,6 +850,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
             {activeTab === 'users' && renderUsers()}
             {activeTab === 'investments' && renderInvestments()}
             {activeTab === 'withdrawals' && renderWithdrawals()}
+            {activeTab === 'kyc' && renderKYC()}
             {activeTab === 'settings' && renderSettings()}
           </div>
         </div>
