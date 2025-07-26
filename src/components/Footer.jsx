@@ -106,31 +106,68 @@ function Footer({ siteSettings }) {
         </div>
         
         <div className="footer-section">
-          <h3>📞 Contact Info</h3>
-          <div style={{ marginBottom: '1rem' }}>
-            <p>
+          <h3 style={{ color: 'var(--accent-color)', marginBottom: 'var(--spacing-sm)', fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)' }}>
+            📞 Contact Info
+          </h3>
+          <div style={{ marginBottom: 'var(--spacing-sm)' }}>
+            <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)', marginBottom: 'var(--spacing-xs)' }}>
               <strong>📧 Email:</strong><br />
-              <a href={`mailto:${siteSettings.contactEmail}`} style={{ color: '#ffd700' }}>
+              <a href={`mailto:${siteSettings.contactEmail}`} style={{
+                color: '#ffd700',
+                textDecoration: 'none',
+                transition: 'color 0.3s ease'
+              }}>
                 {siteSettings.contactEmail}
               </a>
             </p>
           </div>
-          <div style={{ marginBottom: '1rem' }}>
-            <p>
+          <div style={{ marginBottom: 'var(--spacing-sm)' }}>
+            <p style={{ fontSize: 'clamp(0.9rem, 2vw, 1rem)', marginBottom: 'var(--spacing-xs)' }}>
               <strong>📱 Phone:</strong><br />
-              <a href={`tel:${siteSettings.supportPhone}`} style={{ color: '#ffd700' }}>
+              <a href={`tel:${siteSettings.supportPhone}`} style={{
+                color: '#ffd700',
+                textDecoration: 'none',
+                transition: 'color 0.3s ease'
+              }}>
                 {siteSettings.supportPhone}
               </a>
             </p>
           </div>
           <div>
-            <h4 style={{ color: '#ffd700', marginBottom: '0.5rem' }}>🌐 Follow Us</h4>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>📘</a>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>🐦</a>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>📸</a>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>💼</a>
-              <a href="#" style={{ color: 'white', fontSize: '1.5rem' }}>📱</a>
+            <h4 style={{ color: '#ffd700', marginBottom: 'var(--spacing-xs)', fontSize: 'clamp(1rem, 2.2vw, 1.2rem)' }}>
+              🌐 Follow Us
+            </h4>
+            <div style={{
+              display: 'flex',
+              gap: 'var(--spacing-sm)',
+              flexWrap: 'wrap',
+              justifyContent: 'flex-start'
+            }}>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>📘</a>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>🐦</a>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>📸</a>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>💼</a>
+              <a href="#" style={{
+                color: 'white',
+                fontSize: 'clamp(1.2rem, 3vw, 1.5rem)',
+                transition: 'transform 0.3s ease'
+              }}>📱</a>
             </div>
           </div>
         </div>
