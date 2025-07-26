@@ -1,0 +1,539 @@
+import { useState } from 'react';
+
+function AdminPanel({ siteSettings, updateSiteSettings }) {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [localSettings, setLocalSettings] = useState(siteSettings);
+  const [users] = useState([
+    { id: 1, username: 'john_doe', email: 'john@example.com', balance: 2500.50, status: 'active', joinDate: '2024-01-15' },
+    { id: 2, username: 'jane_smith', email: 'jane@example.com', balance: 5000.00, status: 'active', joinDate: '2024-01-10' },
+    { id: 3, username: 'crypto_trader', email: 'trader@example.com', balance: 15000.75, status: 'active', joinDate: '2024-01-05' }
+  ]);
+
+  const [investments] = useState([
+    { id: 1, userId: 1, plan: 'Starter Plan', amount: 1000, profit: 125.50, status: 'active', startDate: '2024-01-15' },
+    { id: 2, userId: 2, plan: 'Pro Plan', amount: 2500, profit: 875.25, status: 'active', startDate: '2024-01-10' },
+    { id: 3, userId: 3, plan: 'Elite Plan', amount: 5000, profit: 1250.00, status: 'completed', startDate: '2024-01-05' }
+  ]);
+
+  const [withdrawals] = useState([
+    { id: 1, userId: 1, amount: 500, coin: 'BTC', status: 'pending', requestDate: '2024-01-22', wallet: '1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa' },
+    { id: 2, userId: 2, amount: 1000, coin: 'USDT', status: 'approved', requestDate: '2024-01-20', wallet: '0x742d35Cc6634C0532925a3b8D0F8C9' },
+    { id: 3, userId: 3, amount: 2500, coin: 'ETH', status: 'rejected', requestDate: '2024-01-18', wallet: '0x742d35Cc6634C0532925a3b8D0F8C9' }
+  ]);
+
+  const [investmentPlans, setInvestmentPlans] = useState([
+    { id: 1, name: 'Starter Plan', minAmount: 100, maxAmount: 999, dailyReturn: 2.5, duration: 30, status: 'active' },
+    { id: 2, name: 'Pro Plan', minAmount: 1000, maxAmount: 4999, dailyReturn: 5.0, duration: 60, status: 'active' },
+    { id: 3, name: 'Elite Plan', minAmount: 5000, maxAmount: 50000, dailyReturn: 7.5, duration: 90, status: 'active' }
+  ]);
+
+  const handleSettingsChange = (field, value) => {
+    setLocalSettings(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  const handleCoinSettingChange = (coin, field, value) => {
+    setLocalSettings(prev => ({
+      ...prev,
+      coins: {
+        ...prev.coins,
+        [coin]: {
+          ...prev.coins[coin],
+          [field]: value
+        }
+      }
+    }));
+  };
+
+  const saveSettings = () => {
+    updateSiteSettings(localSettings);
+    alert('Settings saved successfully!');
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  };
+
+  const getStatusBadge = (status) => {
+    const statusColors = {
+      active: 'success',
+      pending: 'warning',
+      approved: 'success',
+      rejected: 'danger',
+      completed: 'success'
+    };
+    
+    return (
+      <span className={`status-badge status-${statusColors[status]}`}>
+        {status}
+      </span>
+    );
+  };
+
+  const renderDashboard = () => (
+    <div>
+      <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>📊 Admin Dashboard</h2>
+      
+      <div className="stats-grid" style={{ marginBottom: '3rem' }}>
+        <div className="stat-card">
+          <div className="stat-value">{users.length}</div>
+          <div className="stat-label">👥 Total Users</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{formatCurrency(investments.reduce((sum, inv) => sum + inv.amount, 0))}</div>
+          <div className="stat-label">💰 Total Investments</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{formatCurrency(investments.reduce((sum, inv) => sum + inv.profit, 0))}</div>
+          <div className="stat-label">📈 Total Profits</div>
+        </div>
+        <div className="stat-card">
+          <div className="stat-value">{withdrawals.filter(w => w.status === 'pending').length}</div>
+          <div className="stat-label">⏳ Pending Withdrawals</div>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '2rem' }}>
+        <div className="card">
+          <h3 style={{ marginBottom: '1rem' }}>🔄 Recent Activity</h3>
+          <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
+            <div style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
+              <div style={{ fontWeight: 'bold' }}>New user registration</div>
+              <div style={{ fontSize: '0.9rem', color: '#666' }}>john_doe joined 2 hours ago</div>
+            </div>
+            <div style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
+              <div style={{ fontWeight: 'bold' }}>Investment created</div>
+              <div style={{ fontSize: '0.9rem', color: '#666' }}>$2,500 Pro Plan investment by jane_smith</div>
+            </div>
+            <div style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
+              <div style={{ fontWeight: 'bold' }}>Withdrawal request</div>
+              <div style={{ fontSize: '0.9rem', color: '#666' }}>$500 BTC withdrawal pending approval</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card">
+          <h3 style={{ marginBottom: '1rem' }}>📈 Quick Stats</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Active Users:</span>
+              <strong>{users.filter(u => u.status === 'active').length}</strong>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Active Investments:</span>
+              <strong>{investments.filter(i => i.status === 'active').length}</strong>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Pending Withdrawals:</span>
+              <strong style={{ color: '#ffc107' }}>{withdrawals.filter(w => w.status === 'pending').length}</strong>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Success Rate:</span>
+              <strong style={{ color: '#28a745' }}>98.5%</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderUsers = () => (
+    <div>
+      <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>👥 User Management</h2>
+      
+      <div className="card">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h3>All Users</h3>
+          <button className="btn btn-primary">Add New User</button>
+        </div>
+        
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Balance</th>
+                <th>Status</th>
+                <th>Join Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map(user => (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td><strong>{user.username}</strong></td>
+                  <td>{user.email}</td>
+                  <td>{formatCurrency(user.balance)}</td>
+                  <td>{getStatusBadge(user.status)}</td>
+                  <td>{user.joinDate}</td>
+                  <td>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button className="btn btn-primary" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                        Edit
+                      </button>
+                      <button className="btn btn-warning" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                        Suspend
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderWithdrawals = () => (
+    <div>
+      <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>💸 Withdrawal Management</h2>
+      
+      <div className="card">
+        <h3 style={{ marginBottom: '1.5rem' }}>Withdrawal Requests</h3>
+        
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Amount</th>
+                <th>Coin</th>
+                <th>Wallet Address</th>
+                <th>Status</th>
+                <th>Request Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {withdrawals.map(withdrawal => (
+                <tr key={withdrawal.id}>
+                  <td>{withdrawal.id}</td>
+                  <td>{withdrawal.userId}</td>
+                  <td>{formatCurrency(withdrawal.amount)}</td>
+                  <td>{withdrawal.coin}</td>
+                  <td style={{ fontSize: '0.8rem', fontFamily: 'monospace' }}>
+                    {withdrawal.wallet.substring(0, 20)}...
+                  </td>
+                  <td>{getStatusBadge(withdrawal.status)}</td>
+                  <td>{withdrawal.requestDate}</td>
+                  <td>
+                    {withdrawal.status === 'pending' ? (
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
+                        <button className="btn btn-success" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                          Approve
+                        </button>
+                        <button className="btn btn-danger" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                          Reject
+                        </button>
+                      </div>
+                    ) : (
+                      <span style={{ fontSize: '0.8rem', color: '#666' }}>No actions</span>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderInvestments = () => (
+    <div>
+      <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>📊 Investment Management</h2>
+      
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3 style={{ marginBottom: '1.5rem' }}>All Investments</h3>
+        
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>User ID</th>
+                <th>Plan</th>
+                <th>Amount</th>
+                <th>Current Profit</th>
+                <th>Status</th>
+                <th>Start Date</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {investments.map(investment => (
+                <tr key={investment.id}>
+                  <td>{investment.id}</td>
+                  <td>{investment.userId}</td>
+                  <td><strong>{investment.plan}</strong></td>
+                  <td>{formatCurrency(investment.amount)}</td>
+                  <td style={{ color: '#28a745', fontWeight: 'bold' }}>
+                    +{formatCurrency(investment.profit)}
+                  </td>
+                  <td>{getStatusBadge(investment.status)}</td>
+                  <td>{investment.startDate}</td>
+                  <td>
+                    <button className="btn btn-primary" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                      View Details
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div className="card">
+        <h3 style={{ marginBottom: '1.5rem' }}>Investment Plans</h3>
+        
+        <div className="table-container">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>Plan Name</th>
+                <th>Min Amount</th>
+                <th>Max Amount</th>
+                <th>Daily Return</th>
+                <th>Duration (Days)</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {investmentPlans.map(plan => (
+                <tr key={plan.id}>
+                  <td><strong>{plan.name}</strong></td>
+                  <td>{formatCurrency(plan.minAmount)}</td>
+                  <td>{formatCurrency(plan.maxAmount)}</td>
+                  <td>
+                    <span style={{ 
+                      background: 'linear-gradient(135deg, #28a745, #66bb6a)',
+                      color: 'white',
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: '10px',
+                      fontSize: '0.8rem'
+                    }}>
+                      {plan.dailyReturn}%
+                    </span>
+                  </td>
+                  <td>{plan.duration} days</td>
+                  <td>{getStatusBadge(plan.status)}</td>
+                  <td>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button className="btn btn-primary" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                        Edit
+                      </button>
+                      <button className="btn btn-warning" style={{ fontSize: '0.8rem', padding: '0.3rem 0.8rem' }}>
+                        Disable
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        
+        <div style={{ marginTop: '1.5rem' }}>
+          <button className="btn btn-success">Add New Plan</button>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderSettings = () => (
+    <div>
+      <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>⚙️ Site Settings</h2>
+      
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3 style={{ marginBottom: '1.5rem' }}>General Settings</h3>
+        
+        <div style={{ display: 'grid', gap: '1.5rem' }}>
+          <div className="form-group">
+            <label>Site Name</label>
+            <input
+              type="text"
+              className="form-control"
+              value={localSettings.siteName}
+              onChange={(e) => handleSettingsChange('siteName', e.target.value)}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Primary Color</label>
+            <input
+              type="color"
+              className="form-control"
+              value={localSettings.primaryColor}
+              onChange={(e) => handleSettingsChange('primaryColor', e.target.value)}
+              style={{ height: '50px' }}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Contact Email</label>
+            <input
+              type="email"
+              className="form-control"
+              value={localSettings.contactEmail}
+              onChange={(e) => handleSettingsChange('contactEmail', e.target.value)}
+            />
+          </div>
+          
+          <div className="form-group">
+            <label>Support Phone</label>
+            <input
+              type="text"
+              className="form-control"
+              value={localSettings.supportPhone}
+              onChange={(e) => handleSettingsChange('supportPhone', e.target.value)}
+            />
+          </div>
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <h3 style={{ marginBottom: '1.5rem' }}>Cryptocurrency Settings</h3>
+        
+        {Object.entries(localSettings.coins).map(([coinCode, coinData]) => (
+          <div key={coinCode} style={{ 
+            border: '1px solid #e0e0e0', 
+            borderRadius: '15px', 
+            padding: '1.5rem', 
+            marginBottom: '1rem' 
+          }}>
+            <h4 style={{ marginBottom: '1rem', textTransform: 'uppercase', color: '#667eea' }}>
+              {coinCode} Settings
+            </h4>
+            
+            <div style={{ display: 'grid', gap: '1rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <input
+                  type="checkbox"
+                  id={`${coinCode}-enabled`}
+                  checked={coinData.enabled}
+                  onChange={(e) => handleCoinSettingChange(coinCode, 'enabled', e.target.checked)}
+                />
+                <label htmlFor={`${coinCode}-enabled`}>Enable {coinCode.toUpperCase()}</label>
+              </div>
+              
+              <div className="form-group">
+                <label>Wallet Address</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={coinData.address}
+                  onChange={(e) => handleCoinSettingChange(coinCode, 'address', e.target.value)}
+                  placeholder={`Enter ${coinCode.toUpperCase()} wallet address`}
+                />
+              </div>
+              
+              <div className="form-group">
+                <label>Network</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  value={coinData.network}
+                  onChange={(e) => handleCoinSettingChange(coinCode, 'network', e.target.value)}
+                  placeholder="e.g., ERC20, BEP20, TRC20"
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: 'flex', gap: '1rem' }}>
+        <button className="btn btn-success" onClick={saveSettings}>
+          💾 Save All Settings
+        </button>
+        <button className="btn btn-secondary" onClick={() => setLocalSettings(siteSettings)}>
+          🔄 Reset Changes
+        </button>
+      </div>
+    </div>
+  );
+
+  const tabs = [
+    { id: 'dashboard', label: '📊 Dashboard', icon: '📊' },
+    { id: 'users', label: '👥 Users', icon: '👥' },
+    { id: 'investments', label: '📈 Investments', icon: '📈' },
+    { id: 'withdrawals', label: '💸 Withdrawals', icon: '💸' },
+    { id: 'settings', label: '⚙️ Settings', icon: '⚙️' }
+  ];
+
+  return (
+    <div className="admin-panel">
+      <div style={{
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white',
+        padding: '2rem',
+        borderRadius: '20px',
+        marginBottom: '2rem',
+        textAlign: 'center'
+      }}>
+        <h1 style={{ marginBottom: '0.5rem' }}>🛡️ Admin Panel</h1>
+        <p>Manage your {siteSettings.siteName} platform</p>
+      </div>
+
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+        {/* Sidebar */}
+        <div style={{
+          minWidth: '250px',
+          background: 'rgba(255, 255, 255, 0.95)',
+          backdropFilter: 'blur(10px)',
+          borderRadius: '20px',
+          padding: '1.5rem',
+          height: 'fit-content',
+          position: 'sticky',
+          top: '100px'
+        }}>
+          <h3 style={{ marginBottom: '1.5rem', color: '#667eea' }}>Navigation</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            {tabs.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                style={{
+                  background: activeTab === tab.id ? 'linear-gradient(135deg, #667eea, #764ba2)' : 'transparent',
+                  color: activeTab === tab.id ? 'white' : '#333',
+                  border: 'none',
+                  padding: '1rem',
+                  borderRadius: '15px',
+                  textAlign: 'left',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  fontWeight: activeTab === tab.id ? 'bold' : 'normal'
+                }}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div style={{ flex: 1 }} className="admin-content">
+          {activeTab === 'dashboard' && renderDashboard()}
+          {activeTab === 'users' && renderUsers()}
+          {activeTab === 'investments' && renderInvestments()}
+          {activeTab === 'withdrawals' && renderWithdrawals()}
+          {activeTab === 'settings' && renderSettings()}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AdminPanel;
