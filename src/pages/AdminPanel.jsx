@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import UserForm from '../components/UserForm';
+import apiService from '../services/api';
+import { showNotification } from '../components/NotificationSystem';
 
 function AdminPanel({ siteSettings, updateSiteSettings }) {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -53,31 +55,58 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
     }));
   };
 
-  const saveSettings = () => {
-    updateSiteSettings(localSettings);
-    alert('Settings saved successfully!');
+  const saveSettings = async () => {
+    try {
+      await apiService.updateSiteSettings(localSettings);
+      updateSiteSettings(localSettings);
+      showNotification('success', 'Settings saved successfully!');
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      showNotification('error', 'Failed to save settings. Please try again.');
+    }
   };
 
   // Button handler functions
-  const handleApproveWithdrawal = (withdrawalId) => {
-    setWithdrawals(prev => prev.map(w =>
-      w.id === withdrawalId ? { ...w, status: 'approved' } : w
-    ));
-    alert('Withdrawal approved successfully!');
+  const handleApproveWithdrawal = async (withdrawalId) => {
+    try {
+      await apiService.approveWithdrawal(withdrawalId);
+      setWithdrawals(prev => prev.map(w =>
+        w.id === withdrawalId ? { ...w, status: 'approved' } : w
+      ));
+      showNotification('success', 'Withdrawal approved successfully!');
+    } catch (error) {
+      console.error('Error approving withdrawal:', error);
+      showNotification('error', 'Failed to approve withdrawal. Please try again.');
+    }
   };
 
-  const handleRejectWithdrawal = (withdrawalId) => {
-    setWithdrawals(prev => prev.map(w =>
-      w.id === withdrawalId ? { ...w, status: 'rejected' } : w
-    ));
-    alert('Withdrawal rejected!');
+  const handleRejectWithdrawal = async (withdrawalId) => {
+    try {
+      await apiService.rejectWithdrawal(withdrawalId);
+      setWithdrawals(prev => prev.map(w =>
+        w.id === withdrawalId ? { ...w, status: 'rejected' } : w
+      ));
+      showNotification('warning', 'Withdrawal rejected.');
+    } catch (error) {
+      console.error('Error rejecting withdrawal:', error);
+      showNotification('error', 'Failed to reject withdrawal. Please try again.');
+    }
   };
 
-  const handleSuspendUser = (userId) => {
-    setUsers(prev => prev.map(u =>
-      u.id === userId ? { ...u, status: u.status === 'active' ? 'suspended' : 'active' } : u
-    ));
-    alert('User status updated!');
+  const handleSuspendUser = async (userId) => {
+    try {
+      const user = users.find(u => u.id === userId);
+      const newStatus = user.status === 'active' ? 'suspended' : 'active';
+
+      await apiService.updateUser(userId, { status: newStatus });
+      setUsers(prev => prev.map(u =>
+        u.id === userId ? { ...u, status: newStatus } : u
+      ));
+      showNotification('success', `User ${newStatus === 'suspended' ? 'suspended' : 'activated'} successfully!`);
+    } catch (error) {
+      console.error('Error updating user status:', error);
+      showNotification('error', 'Failed to update user status. Please try again.');
+    }
   };
 
   const handleEditUser = (userId) => {
@@ -97,22 +126,22 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
     try {
       if (userFormMode === 'add') {
         // Add new user
-        const newUser = {
-          ...userData,
-          id: users.length + 1,
-          joinDate: new Date().toISOString().split('T')[0]
-        };
+        const response = await apiService.createUser(userData);
+        const newUser = response.user;
         setUsers(prev => [...prev, newUser]);
-        alert('User added successfully!');
+        showNotification('success', 'User added successfully!');
       } else {
         // Update existing user
+        const response = await apiService.updateUser(editingUser.id, userData);
+        const updatedUser = response.user;
         setUsers(prev => prev.map(u =>
-          u.id === editingUser.id ? { ...userData, id: editingUser.id, joinDate: editingUser.joinDate } : u
+          u.id === editingUser.id ? updatedUser : u
         ));
-        alert('User updated successfully!');
+        showNotification('success', 'User updated successfully!');
       }
     } catch (error) {
       console.error('Error saving user:', error);
+      showNotification('error', `Failed to ${userFormMode === 'add' ? 'add' : 'update'} user. Please try again.`);
       throw error;
     }
   };
@@ -125,7 +154,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
 
   const handleViewInvestmentDetails = (investmentId) => {
     const investment = investments.find(i => i.id === investmentId);
-    alert(`Investment Details:\nID: ${investment.id}\nPlan: ${investment.plan}\nAmount: ${formatCurrency(investment.amount)}\nProfit: ${formatCurrency(investment.profit)}\nStatus: ${investment.status}`);
+    showNotification('info', `Investment: ${investment.plan} | Amount: ${formatCurrency(investment.amount)} | Profit: ${formatCurrency(investment.profit)}`);
   };
 
   const handleEditPlan = (planId) => {
@@ -135,7 +164,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
       setInvestmentPlans(prev => prev.map(p =>
         p.id === planId ? { ...p, dailyReturn: parseFloat(newReturn) } : p
       ));
-      alert('Plan updated successfully!');
+      showNotification('success', 'Plan updated successfully!');
     }
   };
 
@@ -143,7 +172,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
     setInvestmentPlans(prev => prev.map(p =>
       p.id === planId ? { ...p, status: p.status === 'active' ? 'disabled' : 'active' } : p
     ));
-    alert('Plan status updated!');
+    showNotification('success', 'Plan status updated!');
   };
 
   const handleAddNewPlan = () => {
@@ -164,7 +193,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
         status: 'active'
       };
       setInvestmentPlans(prev => [...prev, newPlan]);
-      alert('New plan added successfully!');
+      showNotification('success', 'New plan added successfully!');
     }
   };
 
@@ -218,18 +247,13 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
         <div className="card">
           <h3 style={{ marginBottom: '1rem' }}>🔄 Recent Activity</h3>
           <div style={{ maxHeight: '300px', overflowY: 'auto' }}>
-            <div style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
-              <div style={{ fontWeight: 'bold' }}>New user registration</div>
-              <div style={{ fontSize: '0.9rem', color: '#666' }}>john_doe joined 2 hours ago</div>
-            </div>
-            <div style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
-              <div style={{ fontWeight: 'bold' }}>Investment created</div>
-              <div style={{ fontSize: '0.9rem', color: '#666' }}>$2,500 Pro Plan investment by jane_smith</div>
-            </div>
-            <div style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
-              <div style={{ fontWeight: 'bold' }}>Withdrawal request</div>
-              <div style={{ fontSize: '0.9rem', color: '#666' }}>$500 BTC withdrawal pending approval</div>
-            </div>
+            {recentActivity.map((activity, index) => (
+              <div key={index} style={{ padding: '0.5rem 0', borderBottom: '1px solid #eee' }}>
+                <div style={{ fontWeight: 'bold' }}>{activity.type}</div>
+                <div style={{ fontSize: '0.9rem', color: '#666' }}>{activity.description}</div>
+                <div style={{ fontSize: '0.8rem', color: '#999' }}>{activity.time}</div>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -308,7 +332,7 @@ function AdminPanel({ siteSettings, updateSiteSettings }) {
                         onClick={() => handleSuspendUser(user.id)}
                         title={`${user.status === 'active' ? 'Suspend' : 'Activate'} ${user.username}`}
                       >
-                        {user.status === 'active' ? '🚫 Suspend' : '✅ Activate'}
+                        {user.status === 'active' ? '🚫 Suspend' : '�� Activate'}
                       </button>
                     </div>
                   </td>
