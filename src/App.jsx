@@ -49,6 +49,11 @@ function App() {
 
     // Apply site color theme
     document.documentElement.style.setProperty('--primary-color', siteSettings.primaryColor);
+
+    // Initialize automated tasks
+    if (!cronService.isRunning) {
+      cronService.start();
+    }
   }, [siteSettings.primaryColor]);
 
   const login = (userData) => {
