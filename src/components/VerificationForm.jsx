@@ -220,7 +220,7 @@ function VerificationForm({
               </div>
 
               {/* Development helper */}
-              {process.env.NODE_ENV === 'development' && (
+              {import.meta.env.MODE === 'development' && (
                 <div className="dev-helper">
                   <p><strong>Development Mode:</strong></p>
                   <p>Check console or localStorage for the verification code</p>
