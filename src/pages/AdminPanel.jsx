@@ -665,6 +665,160 @@ ${kyc.reviewNotes ? 'Review Notes: ' + kyc.reviewNotes : 'No review notes yet'}`
     </div>
   );
 
+  const renderKYC = () => (
+    <div>
+      <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>🆔 KYC Management</h2>
+
+      <div className="card" style={{ marginBottom: '2rem' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+          <h3>KYC Submissions</h3>
+          <div style={{ display: 'flex', gap: '1rem' }}>
+            <button className="btn btn-warning" style={{ fontSize: '0.9rem' }}>
+              📊 Export Report
+            </button>
+            <button className="btn btn-primary" style={{ fontSize: '0.9rem' }}>
+              🔄 Refresh
+            </button>
+          </div>
+        </div>
+
+        <div className="kyc-stats" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #ffc107, #ffb74d)', color: 'white' }}>
+            <div className="stat-value">{kycSubmissions.filter(k => k.status === 'pending').length}</div>
+            <div className="stat-label">⏳ Pending Review</div>
+          </div>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #28a745, #66bb6a)', color: 'white' }}>
+            <div className="stat-value">{kycSubmissions.filter(k => k.status === 'approved').length}</div>
+            <div className="stat-label">✅ Approved</div>
+          </div>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #dc3545, #e57373)', color: 'white' }}>
+            <div className="stat-value">{kycSubmissions.filter(k => k.status === 'rejected').length}</div>
+            <div className="stat-label">❌ Rejected</div>
+          </div>
+          <div className="stat-card" style={{ background: 'linear-gradient(135deg, #667eea, #764ba2)', color: 'white' }}>
+            <div className="stat-value">{kycSubmissions.length}</div>
+            <div className="stat-label">📄 Total Submissions</div>
+          </div>
+        </div>
+
+        <div className="kyc-submissions-grid">
+          {kycSubmissions.map(kyc => (
+            <div key={kyc.id} className="kyc-card">
+              <div className="kyc-header">
+                <div className="kyc-user-info">
+                  <div className="kyc-avatar">
+                    <img src={kyc.selfieImage} alt="User" onError={(e) => e.target.src = 'https://via.placeholder.com/60x60/667eea/ffffff?text=👤'} />
+                  </div>
+                  <div>
+                    <h4>{kyc.fullName}</h4>
+                    <p className="kyc-username">@{kyc.username}</p>
+                    <p className="kyc-email">{kyc.email}</p>
+                  </div>
+                </div>
+                <div className="kyc-status">
+                  {getStatusBadge(kyc.status)}
+                </div>
+              </div>
+
+              <div className="kyc-details">
+                <div className="kyc-detail-row">
+                  <span className="label">Document Type:</span>
+                  <span className="value">{kyc.documentType.replace('_', ' ').toUpperCase()}</span>
+                </div>
+                <div className="kyc-detail-row">
+                  <span className="label">Document Number:</span>
+                  <span className="value kyc-doc-number">{kyc.documentNumber}</span>
+                </div>
+                <div className="kyc-detail-row">
+                  <span className="label">Submitted:</span>
+                  <span className="value">{kyc.submissionDate}</span>
+                </div>
+                {kyc.reviewDate && (
+                  <div className="kyc-detail-row">
+                    <span className="label">Reviewed:</span>
+                    <span className="value">{kyc.reviewDate}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="kyc-documents">
+                <h5>📄 Documents</h5>
+                <div className="kyc-images">
+                  <div className="kyc-image-item">
+                    <img src={kyc.frontImage} alt="ID Front" />
+                    <span>Front</span>
+                  </div>
+                  <div className="kyc-image-item">
+                    <img src={kyc.backImage} alt="ID Back" />
+                    <span>Back</span>
+                  </div>
+                  <div className="kyc-image-item">
+                    <img src={kyc.selfieImage} alt="Selfie" />
+                    <span>Selfie</span>
+                  </div>
+                </div>
+              </div>
+
+              {kyc.reviewNotes && (
+                <div className="kyc-notes">
+                  <h5>📝 Review Notes</h5>
+                  <p>{kyc.reviewNotes}</p>
+                </div>
+              )}
+
+              <div className="kyc-actions">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => handleViewKYCDetails(kyc)}
+                  style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
+                >
+                  👁️ View Details
+                </button>
+
+                {kyc.status === 'pending' && (
+                  <>
+                    <button
+                      className="btn btn-success"
+                      onClick={() => handleApproveKYC(kyc.id)}
+                      style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
+                    >
+                      ✅ Approve
+                    </button>
+                    <button
+                      className="btn btn-danger"
+                      onClick={() => handleRejectKYC(kyc.id)}
+                      style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
+                    >
+                      ❌ Reject
+                    </button>
+                  </>
+                )}
+
+                {kyc.status === 'rejected' && (
+                  <button
+                    className="btn btn-warning"
+                    onClick={() => handleApproveKYC(kyc.id)}
+                    style={{ fontSize: '0.8rem', padding: '0.5rem 1rem' }}
+                  >
+                    🔄 Re-approve
+                  </button>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {kycSubmissions.length === 0 && (
+          <div style={{ textAlign: 'center', padding: '3rem', color: '#666' }}>
+            <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📄</div>
+            <h3>No KYC Submissions</h3>
+            <p>No KYC submissions to review at this time.</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
   const renderSettings = () => (
     <div>
       <h2 style={{ marginBottom: '2rem', color: '#667eea' }}>⚙️ Site Settings</h2>
